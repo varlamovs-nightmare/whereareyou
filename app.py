@@ -1,6 +1,6 @@
 from random import shuffle, random
 
-from bottle import get, post, run, request
+from bottle import get, post, run, request, static_file
 import uuid
 from geo import distance, move_coordinate
 from street_predictor import parse_summary
@@ -197,5 +197,24 @@ def finish_game(game_id):
         "distance": d
     }
 
+@get('/')
+def index():
+    return static_file('index.html', "front/build")
+
+@get('/static/css/<staticFile>')
+def static_css(staticFile):
+    return static_file(staticFile, "front/build/static/css")
+
+@get('/static/js/<staticFile>')
+def static_js(staticFile):
+    return static_file(staticFile, "front/build/static/js")
+
+@get('/static/media/<staticFile>')
+def static_media(staticFile):
+    return static_file(staticFile, "front/build/static/media")
+
+@get('/<whatever>')
+def index(whatever):
+    return static_file('index.html', "front/build")
 
 run(host='localhost', port=8080, debug=True, server='paste')

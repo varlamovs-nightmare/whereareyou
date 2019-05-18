@@ -1,5 +1,5 @@
+import os
 from random import shuffle, random
-
 from bottle import get, post, run, request, static_file, response
 import uuid
 from geo import distance, move_coordinate
@@ -255,26 +255,29 @@ def finish_game(game_id):
 @get('/')
 @enable_cors
 def index():
-    return static_file('index.html', "front/build")
+    return static_file('index.html', "build")
 
 @get('/static/css/<staticFile>')
 @enable_cors
 def static_css(staticFile):
-    return static_file(staticFile, "front/build/static/css")
+    return static_file(staticFile, "build/static/css")
 
 @get('/static/js/<staticFile>')
 @enable_cors
 def static_js(staticFile):
-    return static_file(staticFile, "front/build/static/js")
+    return static_file(staticFile, "build/static/js")
 
 @get('/static/media/<staticFile>')
 @enable_cors
 def static_media(staticFile):
-    return static_file(staticFile, "front/build/static/media")
+    return static_file(staticFile, "build/static/media")
 
 @get('/<whatever>')
 @enable_cors
 def index(whatever):
-    return static_file('index.html', "front/build")
+    return static_file('index.html', "build")
 
-run(host='localhost', port=8080, debug=True, server='paste')
+if os.environ.get('APP_LOCATION') == 'heroku':
+    run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+else:
+    run(host='localhost', port=8080, debug=True, server='paste')

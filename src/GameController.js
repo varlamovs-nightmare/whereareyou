@@ -1,6 +1,11 @@
 import { api } from './api';
+import deepEq from 'fast-deep-equal';
 
 export class GameController {
+  constructor(notification) {
+    this.notification = notification;
+  }
+
   createGame() {
     return api.post('/games').then(json => {
       this.gameId = json.data.game_id;
@@ -13,6 +18,12 @@ export class GameController {
     });
   }
 
+  goForward() {
+    return api.post(`/games/${this.gameId}/move`).then(json => {
+      this._tips = json.data.tips;
+    })
+  }
+
   tips() {
     if(!this._tips) {
       return [];
@@ -22,6 +33,10 @@ export class GameController {
 
   getMoreTips() {
     return api.post(`/games/${this.gameId}/ask-tip`).then(json => {
+      if(deepEq(json.data.tips, this.tips())) {
+        this.notification.show('Ничего нового, пора идти дальше!');
+        return;
+      }
       this._tips = json.data.tips;
     });
   }

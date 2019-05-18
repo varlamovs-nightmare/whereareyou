@@ -13,7 +13,7 @@ export class Notification {
 
   show(text, info) {
     ReactDOM.render(
-      <Modal onClose={this.hide}>
+      <Modal onClose={this.hide} width={600}>
         <Modal.Header>{text}</Modal.Header>
         <Modal.Body>{info}</Modal.Body>
         <Modal.Footer panel={true}>
@@ -24,7 +24,7 @@ export class Notification {
     );
   }
 
-  hide() {
-    ReactDOM.render(null, this.div);
+  hide = () => {
+    this.div && ReactDOM.render(null, this.div);
   }
 }

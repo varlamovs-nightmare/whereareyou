@@ -4,11 +4,14 @@ import { AppLayout } from './AppLayout';
 import logo from './img/cat.png';
 import { createMap } from './createMap';
 import { GameController } from './GameController';
+import { Notification } from './Notification';
+import Button from '@skbkontur/react-ui/Button';
 
 export class Game extends Component {
   constructor(props) {
     super(props);
-    this.gameController = new GameController();
+    this.notification = new Notification();
+    this.gameController = new GameController(this.notification);
     this.state = {
       tips: this.gameController.tips(),
       loading: true
@@ -23,6 +26,11 @@ export class Game extends Component {
       }, () => {
         createMap('map');
       })
+    }).catch(error => {
+      this.notification.show(
+        'Что-то сломалось, зовите разраба',
+        error && JSON.stringify(error)
+      );
     });
   }
 
@@ -31,6 +39,24 @@ export class Game extends Component {
       this.setState({
         tips: this.gameController.tips()
       })
+    }).catch(error => {
+      this.notification.show(
+        'Что-то сломалось, зовите разраба',
+        error && JSON.stringify(error)
+      );
+    });
+  };
+
+  move = () => {
+    this.gameController.goForward().then(() => {
+      this.setState({
+        tips: this.gameController.tips()
+      })
+    }).catch(error => {
+      this.notification.show(
+        'Что-то сломалось, зовите разраба',
+        error && JSON.stringify(error)
+      );
     });
   };
 
@@ -57,12 +83,12 @@ export class Game extends Component {
               )}
 
               <div className="Game-controls">
-                <button className="Get-button" onClick={this.askTip}>
+                <Button onClick={this.askTip}>
                   Осмотреться
-                </button>
-                <button className="Get-button" onClick={this.askTip}>
+                </Button>
+                <Button onClick={this.move}>
                   Пройти дальше
-                </button>
+                </Button>
               </div>
             </div>
             <div className="Game-map">

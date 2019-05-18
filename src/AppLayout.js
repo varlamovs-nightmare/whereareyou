@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './App.css';
+import './App.scss';
 import 'leaflet/dist/leaflet.css';
 
 export function AppLayout({ children }) {

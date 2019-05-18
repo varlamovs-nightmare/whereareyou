@@ -1,18 +1,8 @@
 import * as L from 'leaflet';
 
-export function getRandomPoint(min_lon, min_lat, max_lon, max_lat) {
-  return {
-    'lon': Math.random() * (max_lon - min_lon) + min_lon,
-    'lat': Math.random() * (max_lat - min_lat) + min_lat
-  };
-}
-
 const ekb = {
   NE: ['56.929128', '60.730923'],
-  SW: ['56.768982', '60.491112'],
-  randomPoint() {
-    return getRandomPoint('60.491112', '56.768982', '60.730923', '56.929128');
-  }
+  SW: ['56.768982', '60.491112']
 };
 
 export function createMap(elementId) {

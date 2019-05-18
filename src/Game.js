@@ -38,7 +38,7 @@ export class Game extends Component {
     if(this.state.loading) {
       return (
         <AppLayout>
-          <h1>Парсим википедию</h1>
+          <h1 className="jump-text">Парсим википедию</h1>
         </AppLayout>
       );
     }

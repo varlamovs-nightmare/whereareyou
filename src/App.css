@@ -105,3 +105,62 @@
     transform: rotate(360deg);
   }
 }
+
+@-webkit-keyframes button_jump {
+  0% {
+    margin-bottom: 0;
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0);
+  }
+  50% {
+    -webkit-transform: translate(0, -10px);
+    transform: translate(0, -10px);
+  }
+}
+
+@keyframes button_jump {
+  0% {
+    margin-bottom: 0;
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0);
+  }
+  50% {
+    -webkit-transform: translate(0, -10px);
+    transform: translate(0, -10px);
+  }
+}
+
+.jump-text {
+  margin: 50px;
+  display: block;
+  position: relative;
+  -webkit-animation-delay: 0;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-name: button_jump;
+  -webkit-animation-timing-function: ease-out;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-fill-mode: forwards;
+  /* this prevents the animation from restarting! */
+  -moz-animation-delay: 0;
+  -moz-animation-duration: 1s;
+  -moz-animation-name: button_jump;
+  -moz-animation-timing-function: ease-out;
+  -moz-animation-iteration-count: infinite;
+  -moz-animation-fill-mode: forwards;
+  /* this prevents the animation from restarting! */
+  -o-animation-delay: 0;
+  -o-animation-duration: 1s;
+  -o-animation-name: button_jump;
+  -o-animation-timing-function: ease-out;
+  -o-animation-iteration-count: infinite;
+  -o-animation-fill-mode: forwards;
+  /* this prevents the animation from restarting! */
+  animation-delay: 0;
+  animation-duration: 1s;
+  animation-name: button_jump;
+  animation-timing-function: ease-out;
+  animation-iteration-count: infinite;
+  animation-fill-mode: forwards;
+  /* this prevents the animation from restarting! */
+}
+

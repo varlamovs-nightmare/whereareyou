@@ -9,9 +9,11 @@ from string_formats import choose_numeral_form
 from osm.osm import describe_objects
 
 from yandex import get_text_by_coordinates
+from stemmer import stemming
 
 import itertools
 import bottle
+import re
 
 cities = {
     "Екатеринбург": (56.807556, 56.847826, 60.570744, 60.657791),
@@ -72,7 +74,7 @@ def add_tips(game):
         success, summary = parse_summary(
             s['name'].replace('улица', '').replace('проспект', '').replace('переулок', '').strip())
 
-        if success and 'улица' not in summary:
+        if success and 'улица' not in summary and not re.search(stemming(s['name']), stemming(summary), re.IGNORECASE):
             game.tips.append(f'{summary.capitalize()}. Это как-то связано с названием ближайшей улицы 🤔')
 
     buildings = near_objects['buildings']

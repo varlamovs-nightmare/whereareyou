@@ -65,7 +65,7 @@ def add_tips(game):
         game.tips.append(f'Рядом с вами протекает {o["name"]} 🌊')
 
     for d in near_objects['districts']:
-        success, district_tip = f'В зоне вашей видимости несколько районов. Один из них{create_district_tip(d['name'])}'
+        success, district_tip = f'В зоне вашей видимости несколько районов. Один из них{create_district_tip(d["name"])}'
         
         if success:
             game.tips.append(district_tip)

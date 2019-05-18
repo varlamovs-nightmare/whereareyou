@@ -38,7 +38,24 @@ def add_tips(game):
         if success:
             game.tips.append(f'Недалеко есть улица, имя которой дал(а) {summary}')
 
+    buildings = near_objects['buildings']
+
+    if len(buildings) > 0:
+        game.tips.append(
+            'Вы рядом с ' + convert_building_type(buildings[0]['building_type']) + ' высотой в ' + buildings[0]['levels'] + ' этажей')
+
     shuffle(game.tips)
+
+
+def convert_building_type(building_type):
+    if building_type == 'dormitory':
+        return 'общежитием'
+    if building_type == 'garage':
+        return 'гаражом'
+    if building_type == 'apartments':
+        return 'жилым домом'
+    else:
+        return 'зданием'
 
 
 def show_tips(game, count):

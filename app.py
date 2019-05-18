@@ -142,6 +142,9 @@ def post_game():
     game = Game(game_id, (lat, lon))
     games[game_id] = game
 
+    add_tips(game)
+    show_tips(game, 2)
+
     return {
         "game_id": game_id,
         "min_lat": min_lat,

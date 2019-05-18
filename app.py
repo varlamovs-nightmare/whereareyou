@@ -98,7 +98,11 @@ def post_game():
     games[game_id] = game
 
     return {
-        "game_id": game_id
+        "game_id": game_id,
+        "min_lat": min_lat,
+        "max_lat": max_lat,
+        "min_lon": min_lon,
+        "max_lon": max_lon
     }
 
 

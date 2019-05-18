@@ -8,7 +8,7 @@ from street_predictor import parse_summary
 from osm.osm import describe_objects
 
 min_lat, max_lat, min_lon, max_lon = 56.807556, 56.847826, 60.570744, 60.657791
-
+move_distance = 300
 
 class Game:
     def __init__(self, game_id, current_coordinates):
@@ -20,7 +20,7 @@ class Game:
         self.tips = []
         self.shown_tips = []
 
-    def move(self, direction, value=300):
+    def move(self, direction, value=move_distance):
         if direction == 'north':
             self.current_coordinates = move_coordinate(self.current_coordinates[0], value), self.current_coordinates[1]
         elif direction == 'south':
@@ -54,6 +54,12 @@ def add_tips(game):
         game.tips.append(
             'Вы рядом с ' + convert_building_type(buildings[0]['building_type']) + ' высотой в ' + buildings[0][
                 'levels'] + ' этажей')
+
+    for v in near_objects['vehicles']:
+        if v['vehicle_type'] == 'train':
+            game.tips.append(f'Мимо пронесся поезд')
+        else:
+            game.tips.append(f'Мимо как раз проезжает полупустой {v["name"]}. Можно успеть')
 
     shuffle(game.tips)
 
@@ -94,7 +100,7 @@ def create_test_game():
 
     test_game = Game('test', (lat, lon))
     add_tips(test_game)
-    show_tips(test_game, 20)
+    show_tips(test_game, 2)
 
     return test_game
 
@@ -185,7 +191,7 @@ def get_game(game_id):
 
     add_tips(game)
 
-    game.shown_tips.append('Вы переместились на 100 м на ' + convert_direction(direction))
+    game.shown_tips.append(f'Вы переместились на {move_distance} м на ' + convert_direction(direction))
 
     show_tips(game, 1)
 

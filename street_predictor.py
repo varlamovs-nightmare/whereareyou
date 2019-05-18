@@ -1,9 +1,19 @@
 import re
 import wikipedia as w
+import json
 
 w.set_lang('ru')
 
 cache = dict()
+
+with open('streets-with-descriptions.txt', 'r', encoding='utf-8') as f:
+    streets = json.loads(f.read())
+
+    for kv in streets:
+        if kv[0].strip():
+            cache[kv[0].strip()] = True, kv[1].strip()
+        else:
+            cache[kv[0].strip()] = False, ''
 
 
 def parse_summary(query='str'):

@@ -142,7 +142,7 @@ def show_tips(game, count):
 
 
 def create_test_game():
-    min_lat, max_lat, min_lon, max_lon = cities['Санкт-Петербург']
+    min_lat, max_lat, min_lon, max_lon = cities['Екатеринбург']
 
     lat = min_lat + (max_lat - min_lat) * random()
     lon = min_lon + (max_lon - min_lon) * random()

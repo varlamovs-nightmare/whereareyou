@@ -1,4 +1,4 @@
-import logo from './img/sticker.webp';
+import logo from './img/cat.png';
 import React from 'react';
 import { AppLayout } from './AppLayout';
 import { Link } from './Link';

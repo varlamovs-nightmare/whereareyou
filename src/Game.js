@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { AppLayout } from './AppLayout';
-import logo from './img/sticker.webp';
+import logo from './img/cat.png';
 import { createMap } from './createMap';
 import { GameController } from './GameController';
 

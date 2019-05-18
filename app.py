@@ -12,9 +12,31 @@ class Game:
         self.is_finished = False
         self.answer_coordinates = None
         self.distance = None
+        self.tips = []
+        self.shown_tips = []
 
 
-games = {'test': Game('test', (56.832469, 60.605989))}
+def add_tips(game):
+    radius = 0.0025
+    cooridnate = game.current_coordinates
+    objects = describe_objects(cooridnate[0] - radius, cooridnate[1] - radius, cooridnate[0] + radius,
+                               cooridnate[1] + radius)
+
+    for o in objects['amenities']:
+        game.tips.append(f'Рядом с вами находится {o["name"]}')
+
+
+def show_tips(game, count):
+    not_shown_tips = [tip for tip in game.tips if tip not in game.shown_tips]
+
+    for i in range(min(len(not_shown_tips), count)):
+        game.shown_tips.append(not_shown_tips[i])
+
+
+test_game = Game('test', (56.832469, 60.605989))
+add_tips(test_game)
+show_tips(test_game, 2)
+games = {'test': test_game}
 
 
 @get('/api/games')
@@ -49,13 +71,16 @@ def get_game(game_id):
 @get('/api/games/<game_id>/tips')
 def get_game(game_id):
     game = games[game_id]
-    cooridnate = game.current_coordinates
 
-    radius = 0.0025
-    objects = describe_objects(cooridnate[0] - radius, cooridnate[1] - radius, cooridnate[0] + radius,
-                               cooridnate[1] + radius)
+    return {'tips': game.shown_tips}
 
-    return {'items': [','.join([object['name'] for object in objects['objects']])]}
+
+@post('/api/games/<game_id>/ask-tip')
+def get_game(game_id):
+    game = games[game_id]
+
+    show_tips(game, 1)
+    return {'tips': game.shown_tips}
 
 
 @post('/api/games/<game_id>/finish')

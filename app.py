@@ -1,6 +1,6 @@
 from random import shuffle, random
 
-from bottle import get, post, run, request, static_file
+from bottle import get, post, run, request, static_file, response
 import uuid
 from geo import distance, move_coordinate
 from street_predictor import parse_summary
@@ -101,8 +101,23 @@ def create_test_game():
 
 games = {'test': create_test_game()}
 
+# the decorator
+def enable_cors(fn):
+    def _enable_cors(*args, **kwargs):
+        # set CORS headers
+        response.headers['Access-Control-Allow-Origin'] = '*'
+        response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
+
+        if request.method != 'OPTIONS':
+            # actual request; reply with the actual response
+            return fn(*args, **kwargs)
+
+    return _enable_cors
+
 
 @get('/api/games')
+@enable_cors
 def get_games():
     return {
         "games": [{"game_id": g.id, "coordinates": g.current_coordinates if g.is_finished else None} for g in
@@ -111,6 +126,7 @@ def get_games():
 
 
 @post('/api/games')
+@enable_cors
 def post_game():
     game_id = str(uuid.uuid4())
 
@@ -130,6 +146,7 @@ def post_game():
 
 
 @get('/api/games/<game_id>')
+@enable_cors
 def get_game(game_id):
     game = games[game_id]
 
@@ -139,6 +156,7 @@ def get_game(game_id):
 
 
 @get('/api/games/<game_id>/tips')
+@enable_cors
 def get_game(game_id):
     game = games[game_id]
 
@@ -146,6 +164,7 @@ def get_game(game_id):
 
 
 @post('/api/games/<game_id>/ask-tip')
+@enable_cors
 def get_game(game_id):
     game = games[game_id]
 
@@ -154,6 +173,7 @@ def get_game(game_id):
 
 
 @post('/api/games/<game_id>/move')
+@enable_cors
 def get_game(game_id):
     game = games[game_id]
 
@@ -173,6 +193,7 @@ def get_game(game_id):
 
 
 @post('/api/games/<game_id>/finish')
+@enable_cors
 def finish_game(game_id):
     game = games[game_id]
 
@@ -198,22 +219,27 @@ def finish_game(game_id):
     }
 
 @get('/')
+@enable_cors
 def index():
     return static_file('index.html', "front/build")
 
 @get('/static/css/<staticFile>')
+@enable_cors
 def static_css(staticFile):
     return static_file(staticFile, "front/build/static/css")
 
 @get('/static/js/<staticFile>')
+@enable_cors
 def static_js(staticFile):
     return static_file(staticFile, "front/build/static/js")
 
 @get('/static/media/<staticFile>')
+@enable_cors
 def static_media(staticFile):
     return static_file(staticFile, "front/build/static/media")
 
 @get('/<whatever>')
+@enable_cors
 def index(whatever):
     return static_file('index.html', "front/build")
 

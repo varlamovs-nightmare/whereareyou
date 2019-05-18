@@ -2,7 +2,7 @@ from random import shuffle, random
 
 from bottle import get, post, run, request
 import uuid
-from geo import distance
+from geo import distance, move_coordinate
 from street_predictor import parse_summary
 
 from osm.osm import describe_objects
@@ -19,6 +19,16 @@ class Game:
         self.distance = None
         self.tips = []
         self.shown_tips = []
+
+    def move(self, direction, value=100):
+        if direction == 'north':
+            self.current_coordinates = move_coordinate(self.current_coordinates[0], value), self.current_coordinates[1]
+        elif direction == 'south':
+            self.current_coordinates = move_coordinate(self.current_coordinates[0], -value), self.current_coordinates[1]
+        elif direction == 'east':
+            self.current_coordinates = self.current_coordinates[0], move_coordinate(self.current_coordinates[1], value)
+        elif direction == 'west':
+            self.current_coordinates = self.current_coordinates[0], move_coordinate(self.current_coordinates[1], -value)
 
 
 def add_tips(game):
@@ -42,7 +52,8 @@ def add_tips(game):
 
     if len(buildings) > 0:
         game.tips.append(
-            'Вы рядом с ' + convert_building_type(buildings[0]['building_type']) + ' высотой в ' + buildings[0]['levels'] + ' этажей')
+            'Вы рядом с ' + convert_building_type(buildings[0]['building_type']) + ' высотой в ' + buildings[0][
+                'levels'] + ' этажей')
 
     shuffle(game.tips)
 
@@ -127,6 +138,25 @@ def get_game(game_id):
     game = games[game_id]
 
     show_tips(game, 1)
+    return {'tips': game.shown_tips}
+
+
+@post('/api/games/<game_id>/move')
+def get_game(game_id):
+    game = games[game_id]
+
+    direction = request.json['direction']
+
+    game.move(direction)
+
+    game.tips = []
+
+    add_tips(game)
+
+    game.shown_tips.append('Вы переместились на 100 м на ' + direction)
+
+    show_tips(game, 1)
+
     return {'tips': game.shown_tips}
 
 

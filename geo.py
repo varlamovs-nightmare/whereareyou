@@ -16,3 +16,8 @@ def distance(point1, point2):
     c = 2 * atan2(sqrt(a), sqrt(1 - a))
 
     return R * c
+
+
+def move_coordinate(cordinate, meters):
+    meters_in_gradus = 111_111
+    return cordinate + meters / meters_in_gradus

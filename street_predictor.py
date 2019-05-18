@@ -5,7 +5,7 @@ w.set_lang('ru')
 
 
 def parse_summary(query='str'):
-    print('query: ' + query)
+    #print('query: ' + query)
     try:
         summary = w.summary(query)
         full_description = re.split(r'\) —', summary)[1]

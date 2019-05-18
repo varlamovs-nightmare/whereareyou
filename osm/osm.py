@@ -5,7 +5,7 @@ import re
 Api = OsmApi()
 pp = pprint.PrettyPrinter(indent=4)
 
-min_lon, min_lat, max_lon, max_lat = 60.5945351426,56.8549239909,60.6177094284,56.8619861177
+min_lon, min_lat, max_lon, max_lat = 60.5965821162,56.8355788102,60.6031910792,56.8398747744
 
 def remove_duplicates(l):
     return [dict(t) for t in {tuple(d.items()) for d in l}]
@@ -18,6 +18,17 @@ def filter_streets(objects):
     o['data']['tag'] != {}
     and 'highway' in o['data']['tag']
     and 'name' in o['data']['tag'], objects))
+
+def filter_sightseeings(objects):
+    return list(filter(lambda o: 
+    o['data']['tag'] != {}
+    and 'tourism' in o['data']['tag']
+    and ('attraction' in o['data']['tag']['tourism']
+        or 'artwork' in o['data']['tag']['tourism']
+        or 'resort' in o['data']['tag']['tourism']
+        or 'viewpoint' in o['data']['tag']['tourism']
+        or 'museum' in o['data']['tag']['tourism'])
+    and 'name' in o['data']['tag'], objects))    
 
 def filter_buildings(objects):
     return list(filter(lambda o: 
@@ -75,6 +86,9 @@ def describe_objects(min_lat, min_lon, max_lat, max_lon):
       {'vehicle_type': convert_vehicle_type(x['data']['tag']['route']),
        'name': re.split(r'\.', x['data']['tag']['name'].replace(':', '.'))[0]} for x in filter_vehicles(objects)
     ]
+    sightseeings = [
+      {'name': x['data']['tag']['name']} for x in filter_sightseeings(objects)
+    ]
     amenities = [
       {'name': x['data']['tag']['name'],
        'type': x['data']['tag']['amenity'],
@@ -84,6 +98,7 @@ def describe_objects(min_lat, min_lon, max_lat, max_lon):
             'streets': remove_duplicates(streets),
             'vehicles': remove_duplicates(vehicles),
             'buildings': buildings,
+            'sightseeings': sightseeings,
             'amenities': amenities}
 
 

@@ -62,8 +62,13 @@ def add_tips(game):
     for o in near_objects['rivers']:
         game.tips.append(f'Рядом с вами протекает {o["name"]} 🌊')
 
-    for s in near_objects['streets']:
+    for d in near_objects['districts']:
+        success, district_tip = create_district_tip(d['name'])
+        
+        if success:
+            game.tips.append(district_tip)
 
+    for s in near_objects['streets']:
         success, summary = parse_summary(
             s['name'].replace('улица', '').replace('проспект', '').replace('переулок', '').strip())
 
@@ -132,6 +137,20 @@ def convert_sightseeing_type(type):
     if type == 'building':
         return None
     return None
+
+districts_tips = {
+    'кировский': 'Этот район назван в честь Сергея Мироновича, фамилия которого послужила названием еще и для города',
+    'ленинский': 'Этот район назвали в честь Ильича. Все знают Ильича ☭',
+    'октябрьский': 'Этот район заставляет задуматься о чем-то между сентябрем и ноябрем',
+    'чкаловский': 'Этот район, если судить по названию, имеет некоторое отношение к лётчикам',
+    'железнодорожный': 'В этом районе наверняка должен быть вокзал и паровозное депо'
+}
+
+def create_district_tip(district_name):
+    for district_key, district_tip in districts_tips.items():
+        if district_key in district_name.lower():
+            return True, district_tip
+    return False, ''
 
 
 def show_tips(game, count):

@@ -52,7 +52,7 @@ def add_tips(game):
             s['name'].replace('улица', '').replace('проспект', '').replace('переулок', '').strip())
 
         if success:
-            game.tips.append(f'Ассоциативный ряд: название улицы рядом, это — {summary}')
+            game.tips.append(f'{summary.capitalize()}. Это как-то связано с названием ближайшей улицы 🤔')
 
     buildings = near_objects['buildings']
 

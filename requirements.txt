@@ -8,6 +8,7 @@ Paste==3.0.8
 requests==2.21.0
 six==1.12.0
 soupsieve==1.9.1
-urllib3==1.25.2
+urllib3==1.24.3
 virtualenv==15.1.0
 wikipedia==1.4.0
+yandex-geocoder==1.0.0

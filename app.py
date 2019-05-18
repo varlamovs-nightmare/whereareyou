@@ -7,7 +7,10 @@ from street_predictor import parse_summary
 
 from osm.osm import describe_objects
 
+from yandex import get_text_by_coordinates
+
 import itertools
+import bottle
 
 min_lat, max_lat, min_lon, max_lon = 56.807556, 56.847826, 60.570744, 60.657791
 move_distance = 300
@@ -182,6 +185,10 @@ def post_game():
 @get('/api/games/<game_id>')
 @enable_cors
 def get_game(game_id):
+
+    if not game_id in games:
+        return bottle.HTTPResponse(status=404, body='game not found')
+
     game = games[game_id]
 
     return {
@@ -200,6 +207,10 @@ def get_game(game_id):
 @post('/api/games/<game_id>/ask-tip')
 @enable_cors
 def get_game(game_id):
+
+    if not game_id in games:
+        return bottle.HTTPResponse(status=404, body='game not found')
+
     game = games[game_id]
 
     show_tips(game, 1)
@@ -209,9 +220,16 @@ def get_game(game_id):
 @post('/api/games/<game_id>/move')
 @enable_cors
 def get_game(game_id):
+
+    if not game_id in games:
+        return bottle.HTTPResponse(status=404, body='game not found')
+
     game = games[game_id]
 
     direction = request.json['direction']
+
+    if not direction:
+        return bottle.HTTPResponse(status=400, body='direction is required')
 
     game.move(direction)
 
@@ -229,13 +247,11 @@ def get_game(game_id):
 @post('/api/games/<game_id>/finish')
 @enable_cors
 def finish_game(game_id):
-    game = games[game_id]
 
-    if game.is_finished:
-        return {
-            "right_coordinates": game.current_coordinates,
-            "distance": game.distance
-        }
+    if not game_id in games:
+        return bottle.HTTPResponse(status=404, body='game not found')
+
+    game = games[game_id]
 
     answer = request.json
 
@@ -243,13 +259,15 @@ def finish_game(game_id):
 
     d = distance(game.current_coordinates, answer_coordinates)
 
-    game.is_finished = True
-    game.answer_coordinates = answer_coordinates
-    game.distance = d
+    if not game.is_finished:
+        game.is_finished = True
+        game.answer_coordinates = answer_coordinates
+        game.distance = d
 
     return {
         "right_coordinates": game.current_coordinates,
-        "distance": d
+        "distance": d,
+        "address": get_text_by_coordinates(game.current_coordinates)
     }
 
 @get('/')

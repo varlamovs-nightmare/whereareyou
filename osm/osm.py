@@ -5,7 +5,7 @@ import re
 Api = OsmApi()
 pp = pprint.PrettyPrinter(indent=4)
 
-min_lon, min_lat, max_lon, max_lat = 60.5882028953,56.8213023404,60.6033090964,56.8279011878
+min_lon, min_lat, max_lon, max_lat = 60.615948,56.803766,60.65337,56.820586
 
 def remove_duplicates(l):
     return [dict(t) for t in {tuple(d.items()) for d in l}]
@@ -80,6 +80,13 @@ def convert_vehicle_type(vehicle_type):
     else:
         return 'unknown'   
 
+def filter_districts(objects):
+    return list(filter(lambda o: 
+    o['data']['tag'] != {}
+    and 'type' in o['data']['tag']
+    and (o['data']['tag']['type'] == 'boundary' or 'boundary' in o['data']['tag'])
+    and 'name' in o['data']['tag'], objects))        
+
 def describe_objects(min_lat, min_lon, max_lat, max_lon):
     objects = get_objects_from_square(min_lon, min_lat, max_lon, max_lat)
     streets = [
@@ -96,6 +103,9 @@ def describe_objects(min_lat, min_lon, max_lat, max_lon):
     sightseeings = [
       {'name': x['data']['tag']['name']} for x in filter_sightseeings(objects)
     ]
+    districts = [
+      {'name': x['data']['tag']['name']} for x in filter_districts(objects)
+    ]
     amenities = [
       {'name': x['data']['tag']['name'],
        'type': x['data']['tag']['amenity'],
@@ -106,6 +116,7 @@ def describe_objects(min_lat, min_lon, max_lat, max_lon):
             'vehicles': remove_duplicates(vehicles),
             'buildings': buildings,
             'sightseeings': sightseeings,
+            'districts': districts,
             'amenities': amenities}
 
 

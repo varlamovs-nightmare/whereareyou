@@ -4,6 +4,7 @@ from bottle import get, post, run, request, static_file, response
 import uuid
 from geo import distance, move_coordinate
 from street_predictor import parse_summary
+from string_formats import choose_numeral_form
 
 from osm.osm import describe_objects
 
@@ -51,18 +52,18 @@ def add_tips(game):
             s['name'].replace('улица', '').replace('проспект', '').replace('переулок', '').strip())
 
         if success:
-            game.tips.append(f'Недалеко есть улица, имя которой дал(а) {summary}')
+            game.tips.append(f'Ассоциативный ряд: название улицы рядом, это — {summary}')
 
     buildings = near_objects['buildings']
 
     if len(buildings) > 0:
         game.tips.append(
-            'Вы рядом с ' + convert_building_type(buildings[0]['building_type']) + ' высотой в ' + buildings[0][
-                'levels'] + ' этажей')
+            'Вы рядом ' + convert_building_type(buildings[0]['building_type']) + ' высотой в ' + buildings[0][
+                'levels'] + choose_numeral_form(buildings[0]['levels'], ' этаж', ' этажа', ' этажей'))
 
     for v in itertools.islice(near_objects['vehicles'], 3):
         if v['vehicle_type'] == 'train':
-            game.tips.append(f'Мимо пронесся поезд')
+            game.tips.append(f'Мимо пронесся поезд 🚂')
         else:
             game.tips.append(f'Мимо как раз проезжает полупустой {v["name"]}. Можно успеть')
 
@@ -75,13 +76,13 @@ def add_tips(game):
 
 def convert_building_type(building_type):
     if building_type == 'dormitory':
-        return 'общежитием'
+        return 'с общежитием'
     if building_type == 'garage':
-        return 'гаражом'
+        return 'с гаражом'
     if building_type == 'apartments':
-        return 'жилым домом'
+        return 'с жилым домом'
     else:
-        return 'зданием'
+        return 'со зданием 🏢'
 
 
 def convert_direction(direction):

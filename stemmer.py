@@ -21,6 +21,3 @@ def stemming(word):
 def text_stemming(text):
     normilized_text = normalize(text)
     return ' '.join(stemmer.stemWords(normilized_text.split()))
-
-
-print(text_stemming('Народной воли'))

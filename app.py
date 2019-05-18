@@ -65,10 +65,10 @@ def add_tips(game):
         game.tips.append(f'Рядом с вами протекает {o["name"]} 🌊')
 
     for d in near_objects['districts']:
-        success, district_tip = f'В зоне вашей видимости несколько районов. Один из них{create_district_tip(d["name"])}'
-        
+        success, district_tip = create_district_tip(d["name"])
+
         if success:
-            game.tips.append(district_tip)
+            game.tips.append('В зоне вашей видимости несколько районов. Один из них' + district_tip)
 
     for s in near_objects['streets']:
         success, summary = parse_summary(

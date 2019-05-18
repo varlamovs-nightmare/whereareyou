@@ -64,7 +64,8 @@ def add_tips(game):
             game.tips.append(f'Мимо как раз проезжает полупустой {v["name"]}. Можно успеть')
 
     for s in near_objects['sightseeings']:
-        game.tips.append(f'Кстати, недалеко интересный туристический объект: ' + s["name"])
+        type = convert_sightseeing_type(s['type'])
+        game.tips.append(f'Кстати, недалеко ' + (type if type else 'интересный туристический объект') + ': ' + s["name"])
 
     shuffle(game.tips)
 
@@ -91,6 +92,25 @@ def convert_direction(direction):
         return 'запад'
     return ''
 
+
+def convert_sightseeing_type(type):
+    if type == 'memorial':
+        return 'памятник'
+    if type == 'attraction':
+        return None
+    if type == 'artwork':
+        return None
+    if type == 'resort':
+        return None
+    if type == 'viewpoint':
+        return None
+    if type == 'museum':
+        return None
+    if type == 'yes':
+        return None
+    if type == 'building':
+        return None
+    return None
 
 def show_tips(game, count):
     not_shown_tips = [tip for tip in game.tips if tip not in game.shown_tips]

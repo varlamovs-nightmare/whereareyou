@@ -12,7 +12,8 @@ def parse_summary(query='str'):
 
     try:
         summary = w.summary(query)
-        full_description = re.split(r'\) —', summary)[1]
+
+        full_description = re.split(r'\) —', summary)[-1]
         description = re.split(r'\.', full_description)[0]
 
         cache[query] = (True, description.strip())
@@ -24,4 +25,4 @@ def parse_summary(query='str'):
 
 
 if __name__ == '__main__':
-    print(parse_summary('Бебеля'))
+    print(parse_summary('Серова'))

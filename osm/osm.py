@@ -109,7 +109,7 @@ def describe_objects(min_lat, min_lon, max_lat, max_lon):
        'name': re.split(r'\.', x['data']['tag']['name'].replace(':', '.'))[0]} for x in filter_vehicles(objects)
     ]
     sightseeings = [
-      {'name': x['data']['tag']['name']} for x in filter_sightseeings(objects)
+      {'name': x['data']['tag']['name'], 'type': x['data']['tag']['tourism'] if 'tourism' in x['data']['tag'] else x['data']['tag']['historic']} for x in filter_sightseeings(objects)
     ]
     districts = [
       {'name': x['data']['tag']['name']} for x in filter_districts(objects)

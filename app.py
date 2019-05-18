@@ -20,7 +20,7 @@ class Game:
         self.tips = []
         self.shown_tips = []
 
-    def move(self, direction, value=100):
+    def move(self, direction, value=300):
         if direction == 'north':
             self.current_coordinates = move_coordinate(self.current_coordinates[0], value), self.current_coordinates[1]
         elif direction == 'south':
@@ -67,6 +67,18 @@ def convert_building_type(building_type):
         return 'жилым домом'
     else:
         return 'зданием'
+
+
+def convert_direction(direction):
+    if direction == 'north':
+        return 'север'
+    if direction == 'south':
+        return 'юг'
+    if direction == 'east':
+        return 'восток'
+    if direction == 'west':
+        return 'запад'
+    return ''
 
 
 def show_tips(game, count):
@@ -153,7 +165,7 @@ def get_game(game_id):
 
     add_tips(game)
 
-    game.shown_tips.append('Вы переместились на 100 м на ' + direction)
+    game.shown_tips.append('Вы переместились на 100 м на ' + convert_direction(direction))
 
     show_tips(game, 1)
 

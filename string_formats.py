@@ -1,4 +1,5 @@
 def choose_numeral_form(l, form1, form2, form5):
+    l = int(l)
     l = l % 100
     if (l > 10 and l < 20):
         return form5

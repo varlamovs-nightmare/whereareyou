@@ -49,6 +49,9 @@ def add_tips(game):
     for o in near_objects['amenities']:
         game.tips.append(f'Рядом с вами находится {o["name"]}')
 
+    for o in near_objects['rivers']:
+        game.tips.append(f'Рядом с вами протекает {o["name"]} 🌊')
+
     for s in near_objects['streets']:
 
         success, summary = parse_summary(

@@ -19,7 +19,7 @@ export class GameController {
   }
 
   goForward() {
-    return api.post(`/games/${this.gameId}/move`).then(json => {
+    return api.post(`/games/${this.gameId}/move/south`).then(json => {
       this._tips = json.data.tips;
     })
   }

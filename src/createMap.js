@@ -14,9 +14,9 @@ export function createMap(elementId) {
   const map = new L.Map(elementId);
 
   const service = new L.tileLayer(
-    'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiZnJ1bWNoZWciLCJhIjoiY2p2dHBwNnc0MWFkZDRhbHF4MDYzNGdnYiJ9.CpcLysWuR3U-eebecVBENw',
+    'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
     {
-      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery � <a href="http://mapbox.com">Mapbox</a>',
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
       maxZoom: 13,
       id: 'mapbox.streets'
     }

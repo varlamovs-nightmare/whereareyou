@@ -227,7 +227,7 @@ def get_game(game_id):
 
 @get('/api/games/<game_id>/tips')
 @enable_cors
-def get_game(game_id):
+def get_tips(game_id):
     game = games[game_id]
 
     return {'tips': game.shown_tips}
@@ -235,7 +235,7 @@ def get_game(game_id):
 
 @post('/api/games/<game_id>/ask-tip')
 @enable_cors
-def get_game(game_id):
+def get_tip(game_id):
     if not game_id in games:
         return bottle.HTTPResponse(status=404, body='game not found')
 
@@ -245,26 +245,19 @@ def get_game(game_id):
     return {'tips': game.shown_tips}
 
 
-@post('/api/games/<game_id>/move')
+@post('/api/games/<game_id>/move/<direction>')
 @enable_cors
-def get_game(game_id):
+def move(game_id, direction):
     if not game_id in games:
         return bottle.HTTPResponse(status=404, body='game not found')
 
     game = games[game_id]
 
-    direction = request.json['direction']
-
-    if not direction:
-        return bottle.HTTPResponse(status=400, body='direction is required')
-
-    game.move(direction)
-
     game.tips = []
 
     add_tips(game)
 
-    game.shown_tips.append(f'Вы переместились на {move_distance} м на ' + convert_direction(direction))
+    game.shown_tips.append(f'Вы переместились на {move_distance} м на ')
 
     show_tips(game, 1)
 

@@ -5,7 +5,7 @@ import re
 Api = OsmApi()
 pp = pprint.PrettyPrinter(indent=4)
 
-min_lon, min_lat, max_lon, max_lat = 60.5965821162,56.8355788102,60.6031910792,56.8398747744
+min_lon, min_lat, max_lon, max_lat = 60.5882028953,56.8213023404,60.6033090964,56.8279011878
 
 def remove_duplicates(l):
     return [dict(t) for t in {tuple(d.items()) for d in l}]
@@ -22,12 +22,19 @@ def filter_streets(objects):
 def filter_sightseeings(objects):
     return list(filter(lambda o: 
     o['data']['tag'] != {}
-    and 'tourism' in o['data']['tag']
-    and ('attraction' in o['data']['tag']['tourism']
-        or 'artwork' in o['data']['tag']['tourism']
-        or 'resort' in o['data']['tag']['tourism']
-        or 'viewpoint' in o['data']['tag']['tourism']
-        or 'museum' in o['data']['tag']['tourism'])
+    and
+    (('tourism' in o['data']['tag']
+      and ('attraction' in o['data']['tag']['tourism']
+          or 'artwork' in o['data']['tag']['tourism']
+          or 'resort' in o['data']['tag']['tourism']
+          or 'viewpoint' in o['data']['tag']['tourism']
+          or 'museum' in o['data']['tag']['tourism']))
+      or
+      (('historic' in o['data']['tag']
+        and ('memorial' in o['data']['tag']['historic']
+          or 'monument' in o['data']['tag']['historic']
+          or 'yes' in o['data']['tag']['historic']
+          or 'building' in o['data']['tag']['historic']))))
     and 'name' in o['data']['tag'], objects))    
 
 def filter_buildings(objects):

@@ -13,8 +13,18 @@ from yandex import get_text_by_coordinates
 import itertools
 import bottle
 
-min_lat, max_lat, min_lon, max_lon = 56.807556, 56.847826, 60.570744, 60.657791
+cities = {
+    "Екатеринбург": (56.807556, 56.847826, 60.570744, 60.657791),
+    "Новосибирск": (55.014014, 55.074232, 82.876859, 82.979521),
+    "Пермь": (57.965700, 58.030282, 56.158590, 56.306500),
+    "Ижевск": (56.838417, 56.874474, 53.189986, 53.243514),
+    "Казань": (55.770257, 55.830138, 49.088112, 49.181250),
+    "Самара": (53.171396, 53.299662, 50.066118, 50.288368),
+    "Санкт-Петербург": (59.896114, 59.993548, 30.231423, 30.413881)
+}
+
 move_distance = 300
+
 
 class Game:
     def __init__(self, game_id, current_coordinates):
@@ -75,7 +85,8 @@ def add_tips(game):
 
     for s in near_objects['sightseeings']:
         type = convert_sightseeing_type(s['type'])
-        game.tips.append(f'Кстати, недалеко ' + (type if type else 'интересный туристический объект') + ': ' + s["name"])
+        game.tips.append(
+            f'Кстати, недалеко ' + (type if type else 'интересный туристический объект') + ': ' + s["name"])
 
     shuffle(game.tips)
 
@@ -122,6 +133,7 @@ def convert_sightseeing_type(type):
         return None
     return None
 
+
 def show_tips(game, count):
     not_shown_tips = [tip for tip in game.tips if tip not in game.shown_tips]
 
@@ -130,6 +142,8 @@ def show_tips(game, count):
 
 
 def create_test_game():
+    min_lat, max_lat, min_lon, max_lon = cities['Санкт-Петербург']
+
     lat = min_lat + (max_lat - min_lat) * random()
     lon = min_lon + (max_lon - min_lon) * random()
 
@@ -142,13 +156,15 @@ def create_test_game():
 
 games = {'test': create_test_game()}
 
+
 # the decorator
 def enable_cors(fn):
     def _enable_cors(*args, **kwargs):
         # set CORS headers
         response.headers['Access-Control-Allow-Origin'] = '*'
         response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, OPTIONS'
-        response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
+        response.headers[
+            'Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
 
         if request.method != 'OPTIONS':
             # actual request; reply with the actual response
@@ -171,6 +187,13 @@ def get_games():
 def post_game():
     game_id = str(uuid.uuid4())
 
+    city_id = request.json['city'] or 'Екатеринбург'
+
+    if city_id not in cities:
+        return bottle.HTTPResponse(status=404, body='city not found')
+
+    min_lat, max_lat, min_lon, max_lon = cities[city_id]
+
     lat = min_lat + (max_lat - min_lat) * random()
     lon = min_lon + (max_lon - min_lon) * random()
 
@@ -192,7 +215,6 @@ def post_game():
 @get('/api/games/<game_id>')
 @enable_cors
 def get_game(game_id):
-
     if not game_id in games:
         return bottle.HTTPResponse(status=404, body='game not found')
 
@@ -214,7 +236,6 @@ def get_game(game_id):
 @post('/api/games/<game_id>/ask-tip')
 @enable_cors
 def get_game(game_id):
-
     if not game_id in games:
         return bottle.HTTPResponse(status=404, body='game not found')
 
@@ -227,7 +248,6 @@ def get_game(game_id):
 @post('/api/games/<game_id>/move')
 @enable_cors
 def get_game(game_id):
-
     if not game_id in games:
         return bottle.HTTPResponse(status=404, body='game not found')
 
@@ -254,7 +274,6 @@ def get_game(game_id):
 @post('/api/games/<game_id>/finish')
 @enable_cors
 def finish_game(game_id):
-
     if not game_id in games:
         return bottle.HTTPResponse(status=404, body='game not found')
 
@@ -278,30 +297,42 @@ def finish_game(game_id):
         "route": game.route
     }
 
+
+@get('/api/cities')
+@enable_cors
+def get_cities():
+    return {"cities": list(cities.keys())}
+
+
 @get('/')
 @enable_cors
 def index():
     return static_file('index.html', "build")
+
 
 @get('/static/css/<staticFile>')
 @enable_cors
 def static_css(staticFile):
     return static_file(staticFile, "build/static/css")
 
+
 @get('/static/js/<staticFile>')
 @enable_cors
 def static_js(staticFile):
     return static_file(staticFile, "build/static/js")
+
 
 @get('/static/media/<staticFile>')
 @enable_cors
 def static_media(staticFile):
     return static_file(staticFile, "build/static/media")
 
+
 @get('/<whatever>')
 @enable_cors
 def index(whatever):
     return static_file('index.html', "build")
+
 
 if os.environ.get('APP_LOCATION') == 'heroku':
     run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))

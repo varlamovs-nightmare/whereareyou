@@ -5,7 +5,7 @@ import re
 Api = OsmApi()
 pp = pprint.PrettyPrinter(indent=4)
 
-min_lon, min_lat, max_lon, max_lat = 37.634090753,55.7350616076,37.6530593351,55.7373086289
+min_lon, min_lat, max_lon, max_lat = 30.3830262851,59.9141077326,30.4079171848,59.9222065257
 
 def remove_duplicates(l):
     return [dict(t) for t in {tuple(d.items()) for d in l}]
@@ -18,6 +18,13 @@ def filter_streets(objects):
     o['data']['tag'] != {}
     and 'highway' in o['data']['tag']
     and 'name' in o['data']['tag'], objects))
+
+def filter_waterways(objects):
+    return list(filter(lambda o: 
+    o['data']['tag'] != {}
+    and 'waterway' in o['data']['tag']
+    and 'river' in o['data']['tag']['waterway']
+    and 'name' in o['data']['tag'], objects))    
 
 def filter_sightseeings(objects):
     return list(filter(lambda o: 
@@ -107,6 +114,9 @@ def describe_objects(min_lat, min_lon, max_lat, max_lon):
     districts = [
       {'name': x['data']['tag']['name']} for x in filter_districts(objects)
     ]
+    rivers = [
+      {'name': x['data']['tag']['name']} for x in filter_waterways(objects)
+    ]
     amenities = [
       {'name': x['data']['tag']['name'],
        'type': x['data']['tag']['amenity'],
@@ -118,6 +128,7 @@ def describe_objects(min_lat, min_lon, max_lat, max_lon):
             'buildings': buildings,
             'sightseeings': sightseeings,
             'districts': districts,
+            'rivers': remove_duplicates(rivers),
             'amenities': amenities}
 
 

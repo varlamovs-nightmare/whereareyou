@@ -10,15 +10,18 @@ export class Game extends Component {
     super(props);
     this.gameController = new GameController();
     this.state = {
-      tips: this.gameController.tips()
+      tips: this.gameController.tips(),
+      loading: true
     };
   }
 
   componentDidMount() {
-    createMap('map');
     this.gameController.createGame().then(() => this.gameController.loadTips()).then(() => {
       this.setState({
-        tips: this.gameController.tips()
+        tips: this.gameController.tips(),
+        loading: false
+      }, () => {
+        createMap('map');
       })
     });
   }
@@ -32,6 +35,14 @@ export class Game extends Component {
   };
 
   render() {
+    if(this.state.loading) {
+      return (
+        <AppLayout>
+          <h1>Парсим википедию</h1>
+        </AppLayout>
+      );
+    }
+
     return (
       <AppLayout>
         <div>
@@ -44,9 +55,15 @@ export class Game extends Component {
                   {this.state.tips.map(tip => <li key={tip}>{tip}</li>)}
                 </ul>
               )}
-              <button className="Get-tips" onClick={this.askTip}>
-                Хочу узнать ещё
-              </button>
+
+              <div className="Game-controls">
+                <button className="Get-button" onClick={this.askTip}>
+                  Осмотреться
+                </button>
+                <button className="Get-button" onClick={this.askTip}>
+                  Пройти дальше
+                </button>
+              </div>
             </div>
             <div className="Game-map">
               <div id="map"></div>

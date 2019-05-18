@@ -22,7 +22,7 @@ export class GameController {
 
   getMoreTips() {
     return api.post(`/games/${this.gameId}/ask-tip`).then(json => {
-      this._tips = this._tips.concat(json.data.tips);
+      this._tips = json.data.tips;
     });
   }
 }

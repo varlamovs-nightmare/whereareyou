@@ -9,7 +9,9 @@ export class Game extends Component {
   constructor(props) {
     super(props);
     this.gameController = new GameController();
-    this.state = { tips: this.gameController.tips() };
+    this.state = {
+      tips: this.gameController.tips()
+    };
   }
 
   componentDidMount() {
@@ -21,6 +23,14 @@ export class Game extends Component {
     });
   }
 
+  askTip = () => {
+    this.gameController.getMoreTips().then(() => {
+      this.setState({
+        tips: this.gameController.tips()
+      })
+    });
+  };
+
   render() {
     return (
       <AppLayout>
@@ -31,10 +41,10 @@ export class Game extends Component {
               <h2 className="Game-tips-header">What you see:</h2>
               {this.state.tips.length > 0 && (
                 <ul className="Game-tips-list">
-                  {this.state.tips.map(tip => <li>{tip}</li>)}
+                  {this.state.tips.map(tip => <li key={tip}>{tip}</li>)}
                 </ul>
               )}
-              <button className="Get-tips">
+              <button className="Get-tips" onClick={this.askTip}>
                 Хочу узнать ещё
               </button>
             </div>

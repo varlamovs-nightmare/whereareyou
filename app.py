@@ -54,7 +54,7 @@ def add_tips(game):
         success, summary = parse_summary(
             s['name'].replace('улица', '').replace('проспект', '').replace('переулок', '').strip())
 
-        if success:
+        if success and 'улица' not in summary:
             game.tips.append(f'{summary.capitalize()}. Это как-то связано с названием ближайшей улицы 🤔')
 
     buildings = near_objects['buildings']

@@ -7,6 +7,8 @@ from street_predictor import parse_summary
 
 from osm.osm import describe_objects
 
+import itertools
+
 min_lat, max_lat, min_lon, max_lon = 56.807556, 56.847826, 60.570744, 60.657791
 move_distance = 300
 
@@ -55,11 +57,14 @@ def add_tips(game):
             'Вы рядом с ' + convert_building_type(buildings[0]['building_type']) + ' высотой в ' + buildings[0][
                 'levels'] + ' этажей')
 
-    for v in near_objects['vehicles']:
+    for v in itertools.islice(near_objects['vehicles'], 3):
         if v['vehicle_type'] == 'train':
             game.tips.append(f'Мимо пронесся поезд')
         else:
             game.tips.append(f'Мимо как раз проезжает полупустой {v["name"]}. Можно успеть')
+
+    for s in near_objects['sightseeings']:
+        game.tips.append(f'Кстати, недалеко интересный туристический объект: ' + s["name"])
 
     shuffle(game.tips)
 

@@ -62,5 +62,6 @@ def describe_objects(min_lat, min_lon, max_lat, max_lon):
             'amenities': amenities}
 
 
-objects = describe_objects(min_lat, min_lon, max_lat, max_lon)
-pp.pprint(objects)
+if __name__ == '__main__':
+    objects = describe_objects(min_lat, min_lon, max_lat, max_lon)
+    pp.pprint(objects)

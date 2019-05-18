@@ -1,9 +1,13 @@
+from random import shuffle, random
+
 from bottle import get, post, run, request
 import uuid
 from geo import distance
+from street_predictor import parse_summary
 
 from osm.osm import describe_objects
 
+min_lat, max_lat, min_lon, max_lon = 56.807556, 56.847826, 60.570744, 60.657791
 
 class Game:
     def __init__(self, game_id, current_coordinates):
@@ -18,12 +22,21 @@ class Game:
 
 def add_tips(game):
     radius = 0.0025
-    cooridnate = game.current_coordinates
-    objects = describe_objects(cooridnate[0] - radius, cooridnate[1] - radius, cooridnate[0] + radius,
-                               cooridnate[1] + radius)
+    coordinate = game.current_coordinates
+    near_objects = describe_objects(coordinate[0] - radius, coordinate[1] - radius, coordinate[0] + radius,
+                               coordinate[1] + radius)
 
-    for o in objects['amenities']:
+    for o in near_objects['amenities']:
         game.tips.append(f'Рядом с вами находится {o["name"]}')
+
+    for s in near_objects['streets']:
+
+        success, summary = parse_summary(s['name'].replace('улица', '').replace('проспект', '').replace('переулок', '').strip())
+
+        if success:
+            game.tips.append(f'Недалеко есть улица, имя которой дал(а) {summary}')
+
+    shuffle(game.tips)
 
 
 def show_tips(game, count):
@@ -33,9 +46,12 @@ def show_tips(game, count):
         game.shown_tips.append(not_shown_tips[i])
 
 
-test_game = Game('test', (56.832469, 60.605989))
+lat = min_lat + (max_lat - min_lat) * random()
+lon = min_lon + (max_lon - min_lon) * random()
+
+test_game = Game('test', (lat, lon))
 add_tips(test_game)
-show_tips(test_game, 2)
+show_tips(test_game, 20)
 games = {'test': test_game}
 
 

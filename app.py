@@ -25,6 +25,7 @@ class Game:
         self.distance = None
         self.tips = []
         self.shown_tips = []
+        self.route = [current_coordinates]
 
     def move(self, direction, value=move_distance):
         if direction == 'north':
@@ -35,6 +36,8 @@ class Game:
             self.current_coordinates = self.current_coordinates[0], move_coordinate(self.current_coordinates[1], value)
         elif direction == 'west':
             self.current_coordinates = self.current_coordinates[0], move_coordinate(self.current_coordinates[1], -value)
+
+        self.route.append(self.current_coordinates)
 
 
 def add_tips(game):
@@ -268,7 +271,8 @@ def finish_game(game_id):
     return {
         "right_coordinates": game.current_coordinates,
         "distance": d,
-        "address": get_text_by_coordinates(game.current_coordinates)
+        "address": get_text_by_coordinates(game.current_coordinates),
+        "route": game.route
     }
 
 @get('/')

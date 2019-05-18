@@ -83,12 +83,16 @@ export class Game extends Component {
               )}
 
               <div className="Game-controls">
-                <Button onClick={this.askTip}>
-                  Осмотреться
-                </Button>
-                <Button onClick={this.move}>
-                  Пройти дальше
-                </Button>
+                <div className="Get-button">
+                  <Button onClick={this.askTip} size="medium">
+                    Осмотреться
+                  </Button>
+                </div>
+                <div className="Get-button">
+                  <Button onClick={this.move} size="medium">
+                    Пройти дальше
+                  </Button>
+                </div>
               </div>
             </div>
             <div className="Game-map">

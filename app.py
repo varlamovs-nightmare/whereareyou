@@ -202,14 +202,8 @@ def get_games():
                   games.values()]
     }
 
-
-@post('/api/games')
-@enable_cors
-def post_game():
+def handle_post_game(city_id):
     game_id = str(uuid.uuid4())
-
-    city_id = request.json['city'] or 'Екатеринбург'
-
     if city_id not in cities:
         return bottle.HTTPResponse(status=404, body='city not found')
 
@@ -231,6 +225,16 @@ def post_game():
         "min_lon": min_lon,
         "max_lon": max_lon
     }
+
+@post('/api/games')
+@enable_cors
+def post_game_without_city():
+    return handle_post_game('Екатеринбург')
+
+@post('/api/games/<city>')
+@enable_cors
+def post_game(city):
+    return handle_post_game(city)
 
 
 @get('/api/games/<game_id>')

@@ -26,7 +26,7 @@ def filter_amenities(objects):
     and 'amenity' in o['data']['tag']
     and 'name' in o['data']['tag'], objects))
 
-def describe_objects(min_lon, min_lat, max_lon, max_lat):
+def describe_objects(min_lat, min_lon, max_lat, max_lon):
     objects = get_objects_from_square(min_lon, min_lat, max_lon, max_lat)
     streets = [
       {'name': x['data']['tag']['name']} for x in filter_streets(objects)
@@ -42,5 +42,5 @@ def describe_objects(min_lon, min_lat, max_lon, max_lat):
             'amenities': remove_duplicates(amenities)}
 
 
-objects = describe_objects(min_lon, min_lat, max_lon, max_lat)
+objects = describe_objects(min_lat, min_lon, max_lat, max_lon)
 pp.pprint(objects)

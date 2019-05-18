@@ -2,6 +2,8 @@ from bottle import get, post, run, request
 import uuid
 from geo import distance
 
+from osm.osm import describe_objects
+
 
 class Game:
     def __init__(self, game_id, current_coordinates):
@@ -12,7 +14,7 @@ class Game:
         self.distance = None
 
 
-games = {}
+games = {'test': Game('test', (56.832469, 60.605989))}
 
 
 @get('/api/games')
@@ -42,6 +44,18 @@ def get_game(game_id):
     return {
         "id": game_id
     }
+
+
+@get('/api/games/<game_id>/tips')
+def get_game(game_id):
+    game = games[game_id]
+    cooridnate = game.current_coordinates
+
+    radius = 0.0025
+    objects = describe_objects(cooridnate[0] - radius, cooridnate[1] - radius, cooridnate[0] + radius,
+                               cooridnate[1] + radius)
+
+    return {'items': [','.join([object['name'] for object in objects['objects']])]}
 
 
 @post('/api/games/<game_id>/finish')

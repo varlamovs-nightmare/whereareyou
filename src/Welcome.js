@@ -14,28 +14,28 @@ export function Welcome() {
         <p>
           Выберите город
         </p>
-        <Link href="/game/Екатеринбург">
+        <Link href="/game?city=Екатеринбург">
           Екатеринбург
         </Link>
-        <Link href="/game/Санкт-Петербург">
+        <Link href="/game?city=Санкт-Петербург">
           Санкт-Петербург
         </Link>
-        <Link href="/game/Новосибирск">
+        <Link href="/game?city=Новосибирск">
           Новосибирск
         </Link>
-        <Link href="/game/Пермь">
+        <Link href="/game?city=Пермь">
           Пермь
         </Link>
-        <Link href="/game/Ижевск">
+        <Link href="/game?city=Ижевск">
           Ижевск
         </Link>
-        <Link href="/game/Казань">
+        <Link href="/game?city=Казань">
           Казань
         </Link>
-        <Link href="/game/Самара">
+        <Link href="/game?city=Самара">
           Самара
         </Link>
-        <Link href="/game/Лондон">
+        <Link href="/game?city=Лондон">
           Лондон
         </Link>
       </header>

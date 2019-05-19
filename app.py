@@ -383,8 +383,11 @@ def index(whatever):
 
 application = bottle.default_app()
 from paste import httpserver
+from paste.translogger import TransLogger
+
+application = TransLogger(application)
 
 if os.environ.get('APP_LOCATION') == 'heroku':
-    httpserver.serve(application, host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
+    httpserver.serve(application, host='0.0.0.0', port=int(os.environ.get("PORT", 5000)), threadpool_workers=20, request_queue_size=20)
 else:
     httpserver.serve(application, host='localhost', port=8080, threadpool_workers=20, request_queue_size=20)

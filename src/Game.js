@@ -9,6 +9,8 @@ import { Notification } from './Notification';
 import Button from '@skbkontur/react-ui/Button';
 import * as L from 'leaflet';
 
+const delay = (t = 300) => new Promise(resolve => setTimeout(resolve, t));
+
 export class Game extends Component {
   tipsListRef = React.createRef();
 
@@ -19,7 +21,8 @@ export class Game extends Component {
     this.state = {
       tips: this.gameController.tips(),
       loading: true,
-      hasMoreTips: this.gameController.hasMoreTips()
+      hasMoreTips: this.gameController.hasMoreTips(),
+      inProcess: false
     };
   }
 
@@ -49,7 +52,7 @@ export class Game extends Component {
     this.setState({
         inProcess: true
     });
-    this.gameController.getMoreTips().then(() => {
+    this.gameController.getMoreTips().then(() => delay()).then(() => {
       this.setState({
         tips: this.gameController.tips(),
         hasMoreTips: this.gameController.hasMoreTips(),
@@ -70,7 +73,7 @@ export class Game extends Component {
     this.setState({
         inProcess: true
     });
-    this.gameController.goNorth().then(() => {
+    this.gameController.goNorth().then(() => delay()).then(() => {
       this.setState({
         tips: this.gameController.tips(),
         hasMoreTips: this.gameController.hasMoreTips(),
@@ -91,7 +94,7 @@ export class Game extends Component {
     this.setState({
         inProcess: true
     });
-    this.gameController.goWest().then(() => {
+    this.gameController.goWest().then(() => delay()).then(() => {
       this.setState({
         tips: this.gameController.tips(),
         hasMoreTips: this.gameController.hasMoreTips(),
@@ -112,7 +115,7 @@ export class Game extends Component {
     this.setState({
         inProcess: true
     });
-    this.gameController.goSouth().then(() => {
+    this.gameController.goSouth().then(() => delay()).then(() => {
       this.setState({
         tips: this.gameController.tips(),
         hasMoreTips: this.gameController.hasMoreTips(),
@@ -133,7 +136,7 @@ export class Game extends Component {
       this.setState({
         inProcess: true
       });
-      this.gameController.goEast().then(() => {
+      this.gameController.goEast().then(() => delay()).then(() => {
       this.setState({
         tips: this.gameController.tips(),
         hasMoreTips: this.gameController.hasMoreTips(),
@@ -210,6 +213,7 @@ export class Game extends Component {
               {this.state.tips.length > 0 && (
                 <ul className="Game-tips-list" ref={this.tipsListRef}>
                   {this.state.tips.map((tip, i) => <li key={tip + i}>{tip}</li>)}
+                  {this.state.inProcess && <li style={{ color: 'rgba(0, 0, 0, 0.4)' }}><b>...колдуем подсказку</b></li>}
                 </ul>
               )}
 

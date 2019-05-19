@@ -215,7 +215,7 @@ def enable_cors(fn):
 def count_score(game):
     dist = distance(game.current_coordinates, game.answer_coordinates)
 
-    return 100_000_000 / (1 + dist)
+    return 100_000 / (1 + dist)
 
 
 @get('/api/games')

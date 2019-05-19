@@ -3,10 +3,12 @@ import React, { Component } from 'react';
 import { AppLayout } from './AppLayout';
 import logo from './img/cat.png';
 import varlamov from './img/varlamov.png';
+import truePlaceIcon from './img/true-place-icon.png';
 import { createMap } from './createMap';
 import { GameController } from './GameController';
 import { Notification } from './Notification';
 import Button from '@skbkontur/react-ui/Button';
+import * as L from 'leaflet';
 
 export class Game extends Component {
   constructor(props) {
@@ -104,11 +106,25 @@ export class Game extends Component {
     });
   };
 
-  onMapClick = (e) => {
+  onMapClick = (e, map) => {
     this.gameController.tryFinish(`${e.latlng.lat}/${e.latlng.lng}`).then(json => {
+
+      var greenIcon = L.icon({
+        iconUrl: truePlaceIcon,
+
+        iconSize:     [25, 41],
+        iconAnchor:   [13, 41]
+      });
+
+
+      L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+      L.polyline([[e.latlng.lat, e.latlng.lng], [json.data.right_coordinates[0], json.data.right_coordinates[1]]], {color: 'green'}).addTo(map);
+      L.polyline(json.data.route, {color: 'red'}).addTo(map);
+      L.marker([json.data.right_coordinates[0], json.data.right_coordinates[1]], {icon: greenIcon}).addTo(map);
+
       this.notification.show(
         'Игра закончена.',
-        `Неплохая попытка! Вы оказались по адресу: ${json.data.address}, а промахнулись на ${Math.round(json.data.distance)} метров.`,
+        `Неплохая попытка! Вы оказались по адресу: ${json.data.address}, промахнулись на ${Math.round(json.data.distance)} метров и заработали ${Math.round(json.data.score)} очков.`,
         () => {
           window.location = '/';
         }

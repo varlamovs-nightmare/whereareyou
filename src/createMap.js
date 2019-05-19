@@ -13,7 +13,7 @@ export function createMap(elementId, onMapClick) {
 
   const map = new L.Map(elementId);
 
-  map.on('click', onMapClick);
+  map.on('click', (e) => {onMapClick(e, map)});
 
   const service = new L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',

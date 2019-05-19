@@ -5,13 +5,15 @@ const ekb = {
   SW: ['56.768982', '60.491112']
 };
 
-export function createMap(elementId) {
+export function createMap(elementId, onMapClick) {
   const neLat = ekb.NE[0];
   const neLng = ekb.NE[1];
   const swLat = ekb.SW[0];
   const swLng = ekb.SW[1];
 
   const map = new L.Map(elementId);
+
+  map.on('click', onMapClick);
 
   const service = new L.tileLayer(
     'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',

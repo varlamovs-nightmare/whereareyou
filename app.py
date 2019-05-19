@@ -306,17 +306,15 @@ def move(game_id, direction):
     return {'tips': game.shown_tips}
 
 
-@post('/api/games/<game_id>/finish')
+@post('/api/games/<game_id>/finish/<latitude>/<longitude>')
 @enable_cors
-def finish_game(game_id):
+def finish_game(game_id, latitude, longitude):
     if not game_id in games:
         return bottle.HTTPResponse(status=404, body='game not found')
 
     game = games[game_id]
 
-    answer = request.json
-
-    answer_coordinates = (answer["latitude"], answer["longitude"])
+    answer_coordinates = (float(latitude), float(longitude))
 
     d = distance(game.current_coordinates, answer_coordinates)
 

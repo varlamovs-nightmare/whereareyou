@@ -11,7 +11,8 @@ export class Notification {
     this.div = div;
   }
 
-  show(text, info) {
+  show(text, info, afterHide) {
+    this.afterHide = afterHide;
     ReactDOM.render(
       <Modal onClose={this.hide} width={600}>
         <Modal.Header>{text}</Modal.Header>
@@ -26,5 +27,6 @@ export class Notification {
 
   hide = () => {
     this.div && ReactDOM.render(null, this.div);
+    this.afterHide && this.afterHide();
   }
 }

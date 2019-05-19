@@ -24,7 +24,7 @@ export class Game extends Component {
         tips: this.gameController.tips(),
         loading: false
       }, () => {
-        createMap('map');
+        createMap('map', this.onMapClick);
       })
     }).catch(error => {
       this.notification.show(
@@ -52,6 +52,23 @@ export class Game extends Component {
       this.setState({
         tips: this.gameController.tips()
       })
+    }).catch(error => {
+      this.notification.show(
+        'Что-то сломалось, зовите разраба',
+        error && JSON.stringify(error)
+      );
+    });
+  };
+
+  onMapClick = (e) => {
+    this.gameController.tryFinish(`${e.latlng.lat}/${e.latlng.lng}`).then(json => {
+      this.notification.show(
+        'Игра закончена.',
+        `Неплохая попытка! Вы оказались по адресу: ${json.data.address}, а промахнулись на ${Math.round(json.data.distance)} метров.`,
+        () => {
+          window.location = '/';
+        }
+      );
     }).catch(error => {
       this.notification.show(
         'Что-то сломалось, зовите разраба',

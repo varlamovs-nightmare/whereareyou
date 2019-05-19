@@ -40,4 +40,8 @@ export class GameController {
       this._tips = json.data.tips;
     });
   }
+
+  tryFinish(ltLng) {
+    return api.post(`/games/${this.gameId}/finish/${ltLng}`);
+  }
 }

@@ -11,6 +11,21 @@ import * as L from 'leaflet';
 
 const delay = (t = 300) => new Promise(resolve => setTimeout(resolve, t));
 
+const preloaderText = [
+  'Парсим википедию',
+  'Выбираем памятники',
+  'Опрашиваем Варламова',
+  'Гуляем по Лондону',
+  'Ловим автобусы',
+  'Парсим википедию',
+  'Выбираем памятники',
+  'Опрашиваем Варламова',
+  'Гуляем по Лондону',
+  'Ловим автобусы'
+];
+
+const getText = () => preloaderText[Math.round(Math.random() * 10)];
+
 export class Game extends Component {
   tipsListRef = React.createRef();
 
@@ -22,7 +37,8 @@ export class Game extends Component {
       tips: this.gameController.tips(),
       loading: true,
       hasMoreTips: this.gameController.hasMoreTips(),
-      inProcess: false
+      inProcess: false,
+      preloaderText: getText()
     };
 
     this.noKeys = true;
@@ -65,8 +81,12 @@ export class Game extends Component {
   }
 
   componentDidMount() {
+    const intervalId = setInterval(() => {
+      this.setState({ preloaderText: getText() })
+    }, 1500);
     this.noKeys = true;
     this.gameController.createGame(this.props.city).then(() => this.gameController.loadTips()).then(() => {
+      clearInterval(intervalId);
       this.setState({
         tips: this.gameController.tips(),
         hasMoreTips: this.gameController.hasMoreTips(),
@@ -255,7 +275,7 @@ export class Game extends Component {
     if(this.state.loading) {
       return (
         <AppLayout>
-          <h1 className="jump-text">Парсим википедию</h1>
+          <h1 className="jump-text">{this.state.preloaderText}</h1>
         </AppLayout>
       );
     }

@@ -15,9 +15,9 @@ def normalize(line):
     return result.strip()
 
 
-def stemming(word):
-    return stemmer.stemWord(word)
-
-def text_stemming(text):
+def stemming(text):
     normilized_text = normalize(text)
     return ' '.join(stemmer.stemWords(normilized_text.split()))
+
+if __name__ == "__main__":
+    print(stemming('Спланой мост'))

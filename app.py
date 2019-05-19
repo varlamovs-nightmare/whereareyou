@@ -38,6 +38,7 @@ class Game:
         self.tips = []
         self.shown_tips = []
         self.route = [current_coordinates]
+        self.score = 0
 
     def move(self, direction, value=move_distance):
         if direction == 'north':
@@ -140,6 +141,7 @@ def convert_sightseeing_type(type):
         return None
     return None
 
+
 districts_tips = {
     'кировский': ' назван в честь Сергея Мироновича, фамилия которого послужила названием еще и для города',
     'ленинский': ' назвали в честь Ильича. Все знают Ильича ☭',
@@ -147,6 +149,7 @@ districts_tips = {
     'чкаловский': ', если судить по названию, имеет некоторое отношение к лётчикам',
     'железнодорожный': ' наверняка расположил внутри себя вокзал, ну или паровозное депо'
 }
+
 
 def create_district_tip(district_name):
     for district_key, district_tip in districts_tips.items():
@@ -194,6 +197,12 @@ def enable_cors(fn):
     return _enable_cors
 
 
+def count_score(game):
+    dist = distance(game.current_coordinates, game.answer_coordinates)
+
+    return 100_000_000 / (1 + dist)
+
+
 @get('/api/games')
 @enable_cors
 def get_games():
@@ -201,6 +210,7 @@ def get_games():
         "games": [{"game_id": g.id, "coordinates": g.current_coordinates if g.is_finished else None} for g in
                   games.values()]
     }
+
 
 def handle_post_game(city_id):
     game_id = str(uuid.uuid4())
@@ -226,10 +236,12 @@ def handle_post_game(city_id):
         "max_lon": max_lon
     }
 
+
 @post('/api/games')
 @enable_cors
 def post_game_without_city():
     return handle_post_game('Екатеринбург')
+
 
 @post('/api/games/<city>')
 @enable_cors
@@ -278,6 +290,11 @@ def move(game_id, direction):
 
     game = games[game_id]
 
+    if not direction:
+        return bottle.HTTPResponse(status=400, body='direction is required')
+
+    game.move(direction)
+
     game.tips = []
 
     add_tips(game)
@@ -307,12 +324,14 @@ def finish_game(game_id):
         game.is_finished = True
         game.answer_coordinates = answer_coordinates
         game.distance = d
+        game.score = count_score(game)
 
     return {
         "right_coordinates": game.current_coordinates,
         "distance": d,
         "address": get_text_by_coordinates(game.current_coordinates),
-        "route": game.route
+        "route": game.route,
+        "score": game.score
     }
 
 

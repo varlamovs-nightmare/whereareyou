@@ -376,12 +376,10 @@ def static_js(staticFile):
 def static_media(staticFile):
     return static_file(staticFile, "build/static/media")
 
-
-@get('/<whatever>')
+@get('/<whatever:path>')
 @enable_cors
 def index(whatever):
     return static_file('index.html', "build")
-
 
 application = bottle.default_app()
 from paste import httpserver

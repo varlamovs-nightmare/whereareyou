@@ -6,9 +6,13 @@ export class GameController {
     this.notification = notification;
   }
 
-  createGame() {
-    return api.post('/games').then(json => {
+  createGame(city) {
+    return api.post('/games', {city: city}).then(json => {
       this.gameId = json.data.game_id;
+      this.minLat = json.data.min_lat;
+      this.maxLat = json.data.max_lat;
+      this.minLon = json.data.min_lon;
+      this.maxLon = json.data.max_lon;
     });
   }
 
@@ -74,5 +78,9 @@ export class GameController {
 
   tryFinish(ltLng) {
     return api.post(`/games/${this.gameId}/finish/${ltLng}`);
+  }
+
+  getBoundaries() {
+    return [[this.minLat, this.minLon], [this.maxLat, this.maxLon]];
   }
 }

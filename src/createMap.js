@@ -5,11 +5,11 @@ const ekb = {
   SW: ['56.768982', '60.491112']
 };
 
-export function createMap(elementId, onMapClick) {
-  const neLat = ekb.NE[0];
-  const neLng = ekb.NE[1];
-  const swLat = ekb.SW[0];
-  const swLng = ekb.SW[1];
+export function createMap(elementId, onMapClick, boundaries) {
+  const neLat = boundaries[0][0];
+  const neLng = boundaries[0][1];
+  const swLat = boundaries[1][0];
+  const swLng = boundaries[1][1];
 
   const map = new L.Map(elementId);
 

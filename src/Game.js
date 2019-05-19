@@ -27,14 +27,14 @@ export class Game extends Component {
   }
 
   componentDidMount() {
-    this.gameController.createGame().then(() => this.gameController.loadTips()).then(() => {
+    this.gameController.createGame('Екатеринбург').then(() => this.gameController.loadTips()).then(() => {
       this.setState({
         tips: this.handleVarlamov(this.gameController.tips()),
         hasMoreTips: this.gameController.hasMoreTips(),
         loading: false,
         inProcess: false
       }, () => {
-        createMap('map', this.onMapClick);
+        createMap('map', this.onMapClick, this.gameController.getBoundaries());
       })
     }).catch(error => {
       this.notification.show(

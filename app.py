@@ -100,7 +100,8 @@ def add_tips(game):
         type = convert_sightseeing_type(s['type'])
         direction = get_direction(coordinate, (s['lat'], s['lon']))
         game.tips.append(
-            f'Кстати, неподалеку на {convert_direction(direction)}е есть ' + (type if type else 'интересный туристический объект') + ': ' + s["name"])
+            f'Кстати, неподалеку на {convert_direction(direction)}е есть ' + (
+                type if type else 'интересный туристический объект') + ': ' + s["name"])
 
     shuffle(game.tips)
 
@@ -228,8 +229,10 @@ def get_games():
     }
 
 
-def handle_post_game(city_id):
+@post('/api/games')
+def post_game():
     game_id = str(uuid.uuid4())
+    city_id = request.json['city'] or 'Екатеринбург'
     if city_id not in cities:
         return bottle.HTTPResponse(status=404, body='city not found')
 
@@ -251,18 +254,6 @@ def handle_post_game(city_id):
         "min_lon": min_lon,
         "max_lon": max_lon
     }
-
-
-@post('/api/games')
-@enable_cors
-def post_game_without_city():
-    return handle_post_game('Екатеринбург')
-
-
-@post('/api/games/<city>')
-@enable_cors
-def post_game(city):
-    return handle_post_game(city)
 
 
 @get('/api/games/<game_id>')
@@ -325,7 +316,6 @@ def move(game_id, direction):
     show_tips(game, 1)
 
     has_more = len([tip for tip in game.tips if tip not in game.shown_tips]) > 0
-
 
     return {'tips': game.shown_tips, 'hasMore': has_more}
 
@@ -392,9 +382,9 @@ def static_media(staticFile):
 def index(whatever):
     return static_file('index.html', "build")
 
+
 application = bottle.default_app()
 from paste import httpserver
-
 
 if os.environ.get('APP_LOCATION') == 'heroku':
     httpserver.serve(application, host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))

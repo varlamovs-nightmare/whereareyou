@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { AppLayout } from './AppLayout';
 import logo from './img/cat.png';
+import varlamov from './img/varlamov.png';
 import { createMap } from './createMap';
 import { GameController } from './GameController';
 import { Notification } from './Notification';
@@ -11,6 +12,10 @@ export class Game extends Component {
   constructor(props) {
     super(props);
     this.notification = new Notification();
+    this.handleVarlamov = function(tips) {
+      console.log(tips);
+      return tips;
+    }
     this.gameController = new GameController(this.notification);
     this.state = {
       tips: this.gameController.tips(),
@@ -21,7 +26,7 @@ export class Game extends Component {
   componentDidMount() {
     this.gameController.createGame().then(() => this.gameController.loadTips()).then(() => {
       this.setState({
-        tips: this.gameController.tips(),
+        tips: this.handleVarlamov(this.gameController.tips()),
         loading: false
       }, () => {
         createMap('map', this.onMapClick);
@@ -37,7 +42,7 @@ export class Game extends Component {
   askTip = () => {
     this.gameController.getMoreTips().then(() => {
       this.setState({
-        tips: this.gameController.tips()
+        tips: this.handleVarlamov(this.gameController.tips())
       })
     }).catch(error => {
       this.notification.show(
@@ -50,7 +55,7 @@ export class Game extends Component {
   move = () => {
     this.gameController.goForward().then(() => {
       this.setState({
-        tips: this.gameController.tips()
+        tips: this.handleVarlamov(this.gameController.tips())
       })
     }).catch(error => {
       this.notification.show(

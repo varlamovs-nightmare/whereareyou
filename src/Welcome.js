@@ -7,9 +7,15 @@ export function Welcome() {
   return (
     <AppLayout>
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <img src={logo} className="App-logo" alt="logo" />        
+        <h1>
+          Where are you?
+        </h1>
         <p>
-          Where are you
+          Это текстовый квест по городу!<br/>
+          По описанию угадай место, где ты находишься, и отметь его на карте.<br/>
+          Можно осматриваться вокруг и наугад передвигаться по карте.<br/>
+          Чем точнее ты укажешь нужное место, тем больше очков получишь!
         </p>
         <p>
           Выберите город

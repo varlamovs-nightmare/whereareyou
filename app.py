@@ -172,8 +172,8 @@ def create_test_game():
     lon = min_lon + (max_lon - min_lon) * random()
 
     test_game = Game('test', (lat, lon))
-    add_tips(test_game)
-    show_tips(test_game, 2)
+    # add_tips(test_game)
+    # show_tips(test_game, 2)
 
     return test_game
 

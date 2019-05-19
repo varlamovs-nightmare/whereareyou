@@ -18,8 +18,26 @@ export class GameController {
     });
   }
 
-  goForward() {
+  goNorth() {
+    return api.post(`/games/${this.gameId}/move/north`).then(json => {
+      this._tips = json.data.tips;
+    })
+  }
+
+  goWest() {
+    return api.post(`/games/${this.gameId}/move/west`).then(json => {
+      this._tips = json.data.tips;
+    })
+  }
+
+  goSouth() {
     return api.post(`/games/${this.gameId}/move/south`).then(json => {
+      this._tips = json.data.tips;
+    })
+  }
+
+  goEast() {
+    return api.post(`/games/${this.gameId}/move/east`).then(json => {
       this._tips = json.data.tips;
     })
   }

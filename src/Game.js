@@ -52,8 +52,47 @@ export class Game extends Component {
     });
   };
 
-  move = () => {
-    this.gameController.goForward().then(() => {
+  moveNorth = () => {
+    this.gameController.goNorth().then(() => {
+      this.setState({
+        tips: this.handleVarlamov(this.gameController.tips())
+      })
+    }).catch(error => {
+      this.notification.show(
+        'Что-то сломалось, зовите разраба',
+        error && JSON.stringify(error)
+      );
+    });
+  };
+
+  moveWest = () => {
+    this.gameController.goWest().then(() => {
+      this.setState({
+        tips: this.handleVarlamov(this.gameController.tips())
+      })
+    }).catch(error => {
+      this.notification.show(
+        'Что-то сломалось, зовите разраба',
+        error && JSON.stringify(error)
+      );
+    });
+  };
+
+  moveSouth = () => {
+    this.gameController.goSouth().then(() => {
+      this.setState({
+        tips: this.handleVarlamov(this.gameController.tips())
+      })
+    }).catch(error => {
+      this.notification.show(
+        'Что-то сломалось, зовите разраба',
+        error && JSON.stringify(error)
+      );
+    });
+  };
+
+  moveEast = () => {
+    this.gameController.goEast().then(() => {
       this.setState({
         tips: this.handleVarlamov(this.gameController.tips())
       })
@@ -111,8 +150,23 @@ export class Game extends Component {
                   </Button>
                 </div>
                 <div className="Get-button">
-                  <Button onClick={this.move} size="medium">
-                    Пройти дальше
+                  <Button onClick={this.moveWest} size="medium">
+                    Пройти к западу
+                  </Button>
+                </div>
+                <div className="Get-button">
+                  <Button onClick={this.moveNorth} size="medium">
+                    Пройти к северу
+                  </Button>
+                </div>
+                <div className="Get-button">
+                  <Button onClick={this.moveSouth} size="medium">
+                    Пройти к югу
+                  </Button>
+                </div>
+                <div className="Get-button">
+                  <Button onClick={this.moveEast} size="medium">
+                    Пройти к востоку
                   </Button>
                 </div>
               </div>

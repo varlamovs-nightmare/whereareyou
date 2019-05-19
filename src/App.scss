@@ -56,17 +56,19 @@
   .Game-frame {
     margin: 40px 100px;
     border: solid 6px;
-    min-height: 60vh;
+    height: 70vh;
     display: flex;
   }
 
   .Game-tips {
     width: 50%;
     text-align: left;
-    padding-left: 30px;
-    padding-right: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 10px;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
   }
 
   .Game-map {
@@ -79,12 +81,11 @@
   }
 
   .Get-button {
-    width: 50%;
-    text-align: center;
   }
 
   .Game-tips-list {
     height: 100%;
+    overflow-y: scroll;
   }
 
   .Game-map {
@@ -93,10 +94,11 @@
 
   .Game-controls {
     display: flex;
+    justify-content: space-between;
   }
 
   #map {
-    min-height: 60vh;
+    min-height: 70vh;
   }
 
   .varlamov-on {

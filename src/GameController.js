@@ -8,6 +8,12 @@ export class GameController {
   }
 
   createGame(city) {
+    // this.minLat = '56.807556';
+    // this.maxLat = '56.847826';
+    // this.minLon = '60.570744';
+    // this.maxLon = '60.657791';
+    // this._tips = Array.from({ length: 10 }, () => 'Подсказка');
+    // return Promise.resolve();
     return api.post('/games', {city: city}).then(json => {
       this.gameId = json.data.game_id;
       this.minLat = json.data.min_lat;
@@ -18,6 +24,8 @@ export class GameController {
   }
 
   loadTips() {
+    // this._tips = this._tips.concat(Array.from({ length: 2 }, () => 'Подсказка'));
+    // return Promise.resolve();
     return api.get(`/games/${this.gameId}/tips`).then(json => {
       this._tips = json.data.tips;
       this._hasMoreTips = json.data.hasMore;
@@ -83,6 +91,8 @@ export class GameController {
   }
 
   getMoreTips() {
+    // this._tips = this._tips.concat(Array.from({ length: 2 }, () => 'Подсказка'));
+    // return Promise.resolve();
     return api.post(`/games/${this.gameId}/ask-tip`).then(json => {
       if(deepEq(json.data.tips, this.tips())) {
         this.notification.show('Ничего нового, пора идти дальше!');

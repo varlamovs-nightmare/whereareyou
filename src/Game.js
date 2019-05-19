@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import { AppLayout } from './AppLayout';
 import logo from './img/cat.png';
-import varlamov from './img/varlamov.png';
 import truePlaceIcon from './img/true-place-icon.png';
 import { createMap } from './createMap';
 import { GameController } from './GameController';
@@ -11,6 +10,8 @@ import Button from '@skbkontur/react-ui/Button';
 import * as L from 'leaflet';
 
 export class Game extends Component {
+  tipsListRef = React.createRef();
+
   constructor(props) {
     super(props);
     this.notification = new Notification();
@@ -38,6 +39,10 @@ export class Game extends Component {
         error && JSON.stringify(error)
       );
     });
+  }
+
+  componentDidUpdate() {
+    this.tipsListRef.current.scrollTop = 10000;
   }
 
   askTip = () => {
@@ -203,7 +208,7 @@ export class Game extends Component {
             <div className="Game-tips">
               <h2 className="Game-tips-header">What you see:</h2>
               {this.state.tips.length > 0 && (
-                <ul className="Game-tips-list">
+                <ul className="Game-tips-list" ref={this.tipsListRef}>
                   {this.state.tips.map((tip, i) => <li key={tip + i}>{tip}</li>)}
                 </ul>
               )}

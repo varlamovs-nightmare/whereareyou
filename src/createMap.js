@@ -1,10 +1,5 @@
 import * as L from 'leaflet';
 
-const ekb = {
-  NE: ['56.929128', '60.730923'],
-  SW: ['56.768982', '60.491112']
-};
-
 export function createMap(elementId, onMapClick, boundaries) {
   const neLat = boundaries[0][0];
   const neLng = boundaries[0][1];

@@ -225,34 +225,62 @@ export class Game extends Component {
                 )}
 
                 {!this.state.isFinished && (
-
-              <div className="Game-controls">
-                <div className="Get-button">
-                  <Button onClick={this.askTip} size="medium" disabled={this.state.inProcess || !this.state.hasMoreTips}>
-                    Осмотреться
-                  </Button>
-                </div>
-                <div className="Get-button">
-                  <Button onClick={this.moveWest} size="medium" disabled={this.state.inProcess}>
-                    Пройти к западу
-                  </Button>
-                </div>
-                <div className="Get-button">
-                  <Button onClick={this.moveNorth} size="medium" disabled={this.state.inProcess}>
-                    Пройти к северу
-                  </Button>
-                </div>
-                <div className="Get-button">
-                  <Button onClick={this.moveSouth} size="medium" disabled={this.state.inProcess}>
-                    Пройти к югу
-                  </Button>
-                </div>
-                <div className="Get-button">
-                  <Button onClick={this.moveEast} size="medium" disabled={this.state.inProcess}>
-                    Пройти к востоку
-                  </Button>
-                </div>
-              </div>
+                  <div>
+                    <div className="Game-controls">
+                      <div className="Get-button" style={{
+                        width: '50%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                      }}>
+                        <Button onClick={this.askTip} size="large" disabled={this.state.inProcess || !this.state.hasMoreTips}>
+                          Осмотреться
+                        </Button>
+                      </div>
+                      <div style={{
+                        width: '50%',
+                        display: 'flex',
+                        flexDirection: 'column'
+                      }}>
+                        <div className="Game-controls" style={{
+                          display: 'flex',
+                          justifyContent: 'center'
+                        }}>
+                          <div className="Get-button">
+                            <Button onClick={this.moveNorth} disabled={this.state.inProcess}>
+                              Пройти к северу
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="Game-controls" style={{
+                          display: 'flex',
+                          justifyContent: 'space-around',
+                          flexWrap: 'wrap'
+                        }}>
+                          <div className="Get-button">
+                            <Button onClick={this.moveWest} disabled={this.state.inProcess}>
+                              Пройти к западу
+                            </Button>
+                          </div>
+                          <div className="Get-button">
+                            <Button onClick={this.moveEast} disabled={this.state.inProcess}>
+                              Пройти к востоку
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="Game-controls" style={{
+                          display: 'flex',
+                          justifyContent: 'center'
+                        }}>
+                          <div className="Get-button">
+                            <Button onClick={this.moveSouth} disabled={this.state.inProcess}>
+                              Пройти к югу
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
                 )}
 

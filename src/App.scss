@@ -56,7 +56,7 @@
   .Game-frame {
     margin: 40px 100px;
     border: solid 6px;
-    min-height: 600px;
+    min-height: 60vh;
     display: flex;
   }
 
@@ -96,7 +96,23 @@
   }
 
   #map {
-    min-height: 80vh;
+    min-height: 60vh;
+  }
+
+  .varlamov-on {
+    background-image: url(./img/varlamov.png);
+    :local {
+      animation: V-spin infinite 10s linear;
+    }
+  }
+
+  @keyframes V-spin {
+    from {
+      background-size: 30px 30px;
+    }
+    to {
+      background-size: 500px 500px;
+    }
   }
 
   @keyframes App-logo-spin {

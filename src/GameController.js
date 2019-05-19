@@ -3,6 +3,7 @@ import deepEq from 'fast-deep-equal';
 
 export class GameController {
   constructor(notification) {
+    this.varlamov = true;
     this.notification = notification;
   }
 
@@ -54,6 +55,22 @@ export class GameController {
   tips() {
     if(!this._tips) {
       return [];
+    }
+    if(this.varlamov) {
+      const match = this._tips[this._tips.length - 1].match(/высотой в (.) этажей/);
+      if(match && match[1]) {
+        const num = parseInt(match[1], 10);
+        if(num > 5) {
+          const el = document.querySelector('.Game-frame');
+          if(el) {
+            el.classList.add('varlamov-on');
+            setTimeout(() => {
+              el.classList.remove('varlamov-on');
+            }, 10000);
+            this.varlamov = false;
+          }
+        }
+      }
     }
     return this._tips;
   }

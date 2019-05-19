@@ -14,10 +14,6 @@ export class Game extends Component {
   constructor(props) {
     super(props);
     this.notification = new Notification();
-    this.handleVarlamov = function(tips) {
-      console.log(tips);
-      return tips;
-    }
     this.gameController = new GameController(this.notification);
     this.state = {
       tips: this.gameController.tips(),
@@ -29,7 +25,7 @@ export class Game extends Component {
   componentDidMount() {
     this.gameController.createGame(this.props.city).then(() => this.gameController.loadTips()).then(() => {
       this.setState({
-        tips: this.handleVarlamov(this.gameController.tips()),
+        tips: this.gameController.tips(),
         hasMoreTips: this.gameController.hasMoreTips(),
         loading: false,
         inProcess: false
@@ -50,7 +46,7 @@ export class Game extends Component {
     });
     this.gameController.getMoreTips().then(() => {
       this.setState({
-        tips: this.handleVarlamov(this.gameController.tips()),
+        tips: this.gameController.tips(),
         hasMoreTips: this.gameController.hasMoreTips(),
         inProcess: false
       })
@@ -71,7 +67,7 @@ export class Game extends Component {
     });
     this.gameController.goNorth().then(() => {
       this.setState({
-        tips: this.handleVarlamov(this.gameController.tips()),
+        tips: this.gameController.tips(),
         hasMoreTips: this.gameController.hasMoreTips(),
         inProcess: false
       })
@@ -92,7 +88,7 @@ export class Game extends Component {
     });
     this.gameController.goWest().then(() => {
       this.setState({
-        tips: this.handleVarlamov(this.gameController.tips()),
+        tips: this.gameController.tips(),
         hasMoreTips: this.gameController.hasMoreTips(),
         inProcess: false
       })
@@ -113,7 +109,7 @@ export class Game extends Component {
     });
     this.gameController.goSouth().then(() => {
       this.setState({
-        tips: this.handleVarlamov(this.gameController.tips()),
+        tips: this.gameController.tips(),
         hasMoreTips: this.gameController.hasMoreTips(),
         inProcess: false
       })
@@ -134,7 +130,7 @@ export class Game extends Component {
       });
       this.gameController.goEast().then(() => {
       this.setState({
-        tips: this.handleVarlamov(this.gameController.tips()),
+        tips: this.gameController.tips(),
         hasMoreTips: this.gameController.hasMoreTips(),
         inProcess: false
       })
@@ -151,7 +147,7 @@ export class Game extends Component {
 
   startNewGame = () => {
     window.location = '/';
-  }
+  };
 
   onMapClick = (e, map) => {
 
@@ -208,7 +204,7 @@ export class Game extends Component {
               <h2 className="Game-tips-header">What you see:</h2>
               {this.state.tips.length > 0 && (
                 <ul className="Game-tips-list">
-                  {this.state.tips.map(tip => <li key={tip}>{tip}</li>)}
+                  {this.state.tips.map((tip, i) => <li key={tip + i}>{tip}</li>)}
                 </ul>
               )}
 

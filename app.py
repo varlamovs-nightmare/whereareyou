@@ -23,7 +23,7 @@ cities = {
     "Казань": (55.770257, 55.830138, 49.088112, 49.181250),
     "Самара": (53.171396, 53.299662, 50.066118, 50.288368),
     "Санкт-Петербург": (59.896114, 59.993548, 30.231423, 30.413881),
-    "Лондон": (51.464854, 51.575864,-0.181617, 0.012276)
+    "Лондон": (51.464854, 51.575864, -0.181617, 0.012276)
 }
 
 move_distance = 300
@@ -61,7 +61,8 @@ def add_tips(game):
                                     coordinate[1] + radius)
 
     for o in near_objects['amenities']:
-        game.tips.append(f'Рядом с вами находится {o["name"]}')
+        direction = get_direction(coordinate, (o['lat'], o['lon']))
+        game.tips.append(f'На {convert_direction(direction)}е от вас находится {o["name"]}')
 
     for o in near_objects['rivers']:
         game.tips.append(f'Рядом с вами протекает {o["name"]} 🌊')
@@ -76,8 +77,10 @@ def add_tips(game):
         success, summary = parse_summary(
             s['name'].replace('улица', '').replace('проспект', '').replace('переулок', '').strip())
 
-        if success and summary and 'улица' not in summary and not re.search(stemming(s['name']), stemming(summary), re.IGNORECASE):
-            game.tips.append(f'{summary[0].capitalize() + summary[1:]}. Это как-то связано с названием ближайшей улицы 🤔')
+        if success and summary and 'улица' not in summary and not re.search(stemming(s['name']), stemming(summary),
+                                                                            re.IGNORECASE):
+            game.tips.append(
+                f'{summary[0].capitalize() + summary[1:]}. Это как-то связано с названием ближайшей улицы 🤔')
 
     buildings = near_objects['buildings']
 
@@ -94,10 +97,21 @@ def add_tips(game):
 
     for s in near_objects['sightseeings']:
         type = convert_sightseeing_type(s['type'])
+        direction = get_direction(coordinate, (s['lat'], s['lon']))
         game.tips.append(
-            f'Кстати, недалеко ' + (type if type else 'интересный туристический объект') + ': ' + s["name"])
+            f'Кстати, неподалеку на {convert_direction(direction)}е есть ' + (type if type else 'интересный туристический объект') + ': ' + s["name"])
 
     shuffle(game.tips)
+
+
+def get_direction(my_coordinates, object_coordinates):
+    dlat = object_coordinates[0] - my_coordinates[0]
+    dlon = object_coordinates[1] - my_coordinates[1]
+
+    if abs(dlat) < abs(dlon):
+        return 'east' if dlon > 0 else 'west'
+
+    return 'north' if dlat > 0 else 'south'
 
 
 def convert_building_type(building_type):
@@ -300,7 +314,7 @@ def move(game_id, direction):
 
     add_tips(game)
 
-    game.shown_tips.append(f'Вы переместились на {move_distance} м на {convert_direction(direction)}')
+    game.shown_tips.append(f'Вы переместились на {move_distance}м на {convert_direction(direction)}')
 
     show_tips(game, 1)
 

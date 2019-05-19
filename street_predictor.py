@@ -2,8 +2,6 @@ import re
 import wikipedia as w
 import json
 
-w.set_lang('ru')
-
 cache = dict()
 
 with open('streets-with-descriptions.txt', 'r', encoding='utf-8') as f:
@@ -16,11 +14,12 @@ with open('streets-with-descriptions.txt', 'r', encoding='utf-8') as f:
             cache[kv[0].strip()] = False, ''
 
 
-def parse_summary(query='str'):
+def parse_summary(query='str', lang='ru'):
     if query in cache:
         return cache[query]
 
     try:
+        w.set_lang(lang)
         summary = w.summary(query)
 
         full_description = re.split(r'\) —', summary)[-1]

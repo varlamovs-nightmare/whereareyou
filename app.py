@@ -16,21 +16,21 @@ import bottle
 import re
 
 cities = {
-    "Екатеринбург": (56.807556, 56.847826, 60.570744, 60.657791),
-    "Новосибирск": (55.014014, 55.074232, 82.876859, 82.979521),
-    "Пермь": (57.965700, 58.030282, 56.158590, 56.306500),
-    "Ижевск": (56.838417, 56.874474, 53.189986, 53.243514),
-    "Казань": (55.770257, 55.830138, 49.088112, 49.181250),
-    "Самара": (53.171396, 53.299662, 50.066118, 50.288368),
-    "Санкт-Петербург": (59.896114, 59.993548, 30.231423, 30.413881),
-    "Лондон": (51.464854, 51.575864, -0.181617, 0.012276)
+    "Екатеринбург": (56.807556, 56.847826, 60.570744, 60.657791, 'ru'),
+    "Новосибирск": (55.014014, 55.074232, 82.876859, 82.979521, 'ru'),
+    "Пермь": (57.965700, 58.030282, 56.158590, 56.306500, 'ru'),
+    "Ижевск": (56.838417, 56.874474, 53.189986, 53.243514, 'ru'),
+    "Казань": (55.770257, 55.830138, 49.088112, 49.181250, 'ru'),
+    "Самара": (53.171396, 53.299662, 50.066118, 50.288368, 'ru'),
+    "Санкт-Петербург": (59.896114, 59.993548, 30.231423, 30.413881, 'ru'),
+    "Лондон": (51.464854, 51.575864, -0.181617, 0.012276, 'en')
 }
 
 move_distance = 300
 
 
 class Game:
-    def __init__(self, game_id, current_coordinates):
+    def __init__(self, game_id, current_coordinates, lang):
         self.id = game_id
         self.current_coordinates = current_coordinates
         self.is_finished = False
@@ -40,6 +40,7 @@ class Game:
         self.shown_tips = []
         self.route = [current_coordinates]
         self.score = 0
+        self.lang = lang
 
     def move(self, direction, value=move_distance):
         if direction == 'north':
@@ -75,7 +76,7 @@ def add_tips(game):
 
     for s in near_objects['streets']:
         success, summary = parse_summary(
-            s['name'].replace('улица', '').replace('проспект', '').replace('переулок', '').strip())
+            s['name'].replace('улица', '').replace('проспект', '').replace('переулок', '').strip(), game.lang)
 
         if success and summary and 'улица' not in summary and not re.search(stemming(s['name']), stemming(summary),
                                                                             re.IGNORECASE):
@@ -181,12 +182,12 @@ def show_tips(game, count):
 
 
 def create_test_game():
-    min_lat, max_lat, min_lon, max_lon = cities['Екатеринбург']
+    min_lat, max_lat, min_lon, max_lon, lang = cities['Екатеринбург']
 
     lat = min_lat + (max_lat - min_lat) * random()
     lon = min_lon + (max_lon - min_lon) * random()
 
-    test_game = Game('test', (lat, lon))
+    test_game = Game('test', (lat, lon), lang)
     # add_tips(test_game)
     # show_tips(test_game, 2)
 
@@ -232,12 +233,12 @@ def handle_post_game(city_id):
     if city_id not in cities:
         return bottle.HTTPResponse(status=404, body='city not found')
 
-    min_lat, max_lat, min_lon, max_lon = cities[city_id]
+    min_lat, max_lat, min_lon, max_lon, lang = cities[city_id]
 
     lat = min_lat + (max_lat - min_lat) * random()
     lon = min_lon + (max_lon - min_lon) * random()
 
-    game = Game(game_id, (lat, lon))
+    game = Game(game_id, (lat, lon), lang)
     games[game_id] = game
 
     add_tips(game)

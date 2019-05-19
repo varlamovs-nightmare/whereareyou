@@ -10,8 +10,8 @@ export const routes = [
     action: Welcome
   },
   {
-    path: '/game',
-    action: () => <Game/>
+    path: '/game/:city',
+    action: (context) => <Game city={context.params.city}/>
   },
   {
     path: '(.*)',

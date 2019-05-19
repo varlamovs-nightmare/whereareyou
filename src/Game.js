@@ -27,7 +27,7 @@ export class Game extends Component {
   }
 
   componentDidMount() {
-    this.gameController.createGame('Екатеринбург').then(() => this.gameController.loadTips()).then(() => {
+    this.gameController.createGame(this.props.city).then(() => this.gameController.loadTips()).then(() => {
       this.setState({
         tips: this.handleVarlamov(this.gameController.tips()),
         hasMoreTips: this.gameController.hasMoreTips(),

@@ -142,7 +142,14 @@ export class Game extends Component {
     });
   };
 
+  startNewGame = () => {
+    window.location = '/';
+  }
+
   onMapClick = (e, map) => {
+
+    if (this.state.isFinished) return;
+
     this.gameController.tryFinish(`${e.latlng.lat}/${e.latlng.lng}`).then(json => {
 
       var greenIcon = L.icon({
@@ -162,7 +169,10 @@ export class Game extends Component {
         'Игра закончена.',
         `Неплохая попытка! Вы оказались по адресу: ${json.data.address}, промахнулись на ${Math.round(json.data.distance)} метров и заработали ${Math.round(json.data.score)} очков.`,
         () => {
-          window.location = '/';
+
+          this.setState({
+            isFinished: true
+          })
         }
       );
     }).catch(error => {
@@ -195,6 +205,19 @@ export class Game extends Component {
                 </ul>
               )}
 
+
+                {this.state.isFinished && (
+                  <div className="Game-controls">
+                    <div className="Get-button">
+                      <Button onClick={this.startNewGame} size="medium">
+                        Начать новую игру
+                      </Button>
+                    </div>
+                    </div>
+                )}
+
+                {!this.state.isFinished && (
+
               <div className="Game-controls">
                 <div className="Get-button">
                   <Button onClick={this.askTip} size="medium" disabled={this.state.inProcess}>
@@ -222,6 +245,9 @@ export class Game extends Component {
                   </Button>
                 </div>
               </div>
+
+                )}
+
             </div>
             <div className="Game-map">
               <div id="map"></div>

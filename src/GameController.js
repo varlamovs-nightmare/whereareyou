@@ -64,7 +64,7 @@ export class GameController {
     if(!this._tips) {
       return [];
     }
-    if(this.varlamov) {
+    if(this.varlamov && this._tips.length) {
       const match = this._tips[this._tips.length - 1].match(/высотой в (.) этажей/);
       if(match && match[1]) {
         const num = parseInt(match[1], 10);

@@ -24,9 +24,48 @@ export class Game extends Component {
       hasMoreTips: this.gameController.hasMoreTips(),
       inProcess: false
     };
+
+    this.noKeys = true;
+
+    document.onkeyup = e => {
+      if(this.noKeys) {
+        return;
+      }
+      if (e.code === 'ArrowUp') {
+        return this.moveNorth();
+      }
+      if (e.code === 'ArrowRight') {
+        return this.moveEast();
+      }
+      if (e.code === 'ArrowLeft') {
+        return this.moveWest();
+      }
+      if (e.code === 'ArrowDown') {
+        return this.moveSouth();
+      }
+      if (e.code === 'Enter') {
+        return this.askTip();
+      }
+      if (e.code === 'Space') {
+        return this.askTip();
+      }
+      if (e.code === 'KeyK') {
+        return this.moveNorth();
+      }
+      if (e.code === 'KeyL') {
+        return this.moveEast();
+      }
+      if (e.code === 'KeyH') {
+        return this.moveWest();
+      }
+      if (e.code === 'KeyJ') {
+        return this.moveSouth();
+      }
+    };
   }
 
   componentDidMount() {
+    this.noKeys = true;
     this.gameController.createGame(this.props.city).then(() => this.gameController.loadTips()).then(() => {
       this.setState({
         tips: this.gameController.tips(),
@@ -35,6 +74,7 @@ export class Game extends Component {
         inProcess: false
       }, () => {
         createMap('map', this.onMapClick, this.gameController.getBoundaries());
+        this.noKeys = false;
       })
     }).catch(error => {
       this.notification.show(
@@ -49,6 +89,7 @@ export class Game extends Component {
   }
 
   askTip = () => {
+    this.noKeys = true;
     this.setState({
         inProcess: true
     });
@@ -57,6 +98,8 @@ export class Game extends Component {
         tips: this.gameController.tips(),
         hasMoreTips: this.gameController.hasMoreTips(),
         inProcess: false
+      }, () => {
+        this.noKeys = false;
       })
     }).catch(error => {
       this.setState({
@@ -70,6 +113,7 @@ export class Game extends Component {
   };
 
   moveNorth = () => {
+    this.noKeys = true;
     this.setState({
         inProcess: true
     });
@@ -78,6 +122,8 @@ export class Game extends Component {
         tips: this.gameController.tips(),
         hasMoreTips: this.gameController.hasMoreTips(),
         inProcess: false
+      }, () => {
+        this.noKeys = false;
       })
     }).catch(error => {
       this.notification.show(
@@ -91,6 +137,7 @@ export class Game extends Component {
   };
 
   moveWest = () => {
+    this.noKeys = true;
     this.setState({
         inProcess: true
     });
@@ -99,6 +146,8 @@ export class Game extends Component {
         tips: this.gameController.tips(),
         hasMoreTips: this.gameController.hasMoreTips(),
         inProcess: false
+      }, () => {
+        this.noKeys = false;
       })
     }).catch(error => {
       this.notification.show(
@@ -112,6 +161,7 @@ export class Game extends Component {
   };
 
   moveSouth = () => {
+    this.noKeys = true;
     this.setState({
         inProcess: true
     });
@@ -120,6 +170,8 @@ export class Game extends Component {
         tips: this.gameController.tips(),
         hasMoreTips: this.gameController.hasMoreTips(),
         inProcess: false
+      }, () => {
+        this.noKeys = false;
       })
     }).catch(error => {
       this.notification.show(
@@ -133,6 +185,7 @@ export class Game extends Component {
   };
 
   moveEast = () => {
+      this.noKeys = true;
       this.setState({
         inProcess: true
       });
@@ -141,6 +194,8 @@ export class Game extends Component {
         tips: this.gameController.tips(),
         hasMoreTips: this.gameController.hasMoreTips(),
         inProcess: false
+      }, () => {
+        this.noKeys = false;
       })
     }).catch(error => {
       this.notification.show(

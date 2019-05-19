@@ -22,7 +22,8 @@ cities = {
     "Ижевск": (56.838417, 56.874474, 53.189986, 53.243514),
     "Казань": (55.770257, 55.830138, 49.088112, 49.181250),
     "Самара": (53.171396, 53.299662, 50.066118, 50.288368),
-    "Санкт-Петербург": (59.896114, 59.993548, 30.231423, 30.413881)
+    "Санкт-Петербург": (59.896114, 59.993548, 30.231423, 30.413881),
+    "Лондон": (51.464854, 51.575864,-0.181617, 0.012276)
 }
 
 move_distance = 300
@@ -75,8 +76,8 @@ def add_tips(game):
         success, summary = parse_summary(
             s['name'].replace('улица', '').replace('проспект', '').replace('переулок', '').strip())
 
-        if success and 'улица' not in summary and not re.search(stemming(s['name']), stemming(summary), re.IGNORECASE):
-            game.tips.append(f'{summary.capitalize()}. Это как-то связано с названием ближайшей улицы 🤔')
+        if success and summary and 'улица' not in summary and not re.search(stemming(s['name']), stemming(summary), re.IGNORECASE):
+            game.tips.append(f'{summary[0].capitalize() + summary[1:]}. Это как-то связано с названием ближайшей улицы 🤔')
 
     buildings = near_objects['buildings']
 

@@ -29,7 +29,8 @@ export class Game extends Component {
     this.gameController.createGame().then(() => this.gameController.loadTips()).then(() => {
       this.setState({
         tips: this.handleVarlamov(this.gameController.tips()),
-        loading: false
+        loading: false,
+        inProcess: false
       }, () => {
         createMap('map', this.onMapClick);
       })
@@ -42,11 +43,18 @@ export class Game extends Component {
   }
 
   askTip = () => {
+    this.setState({
+        inProcess: true
+    });
     this.gameController.getMoreTips().then(() => {
       this.setState({
-        tips: this.handleVarlamov(this.gameController.tips())
+        tips: this.handleVarlamov(this.gameController.tips()),
+        inProcess: false
       })
     }).catch(error => {
+      this.setState({
+        inProcess: false
+      });
       this.notification.show(
         'Что-то сломалось, зовите разраба',
         error && JSON.stringify(error)
@@ -55,54 +63,82 @@ export class Game extends Component {
   };
 
   moveNorth = () => {
+    this.setState({
+        inProcess: true
+    });
     this.gameController.goNorth().then(() => {
       this.setState({
-        tips: this.handleVarlamov(this.gameController.tips())
+        tips: this.handleVarlamov(this.gameController.tips()),
+        inProcess: false
       })
     }).catch(error => {
       this.notification.show(
         'Что-то сломалось, зовите разраба',
         error && JSON.stringify(error)
       );
+      this.setState({
+        inProcess: false
+      });
     });
   };
 
   moveWest = () => {
+    this.setState({
+        inProcess: true
+    });
     this.gameController.goWest().then(() => {
       this.setState({
-        tips: this.handleVarlamov(this.gameController.tips())
+        tips: this.handleVarlamov(this.gameController.tips()),
+        inProcess: false
       })
     }).catch(error => {
       this.notification.show(
         'Что-то сломалось, зовите разраба',
         error && JSON.stringify(error)
       );
+      this.setState({
+        inProcess: false
+      });
     });
   };
 
   moveSouth = () => {
+    this.setState({
+        inProcess: true
+    });
     this.gameController.goSouth().then(() => {
       this.setState({
-        tips: this.handleVarlamov(this.gameController.tips())
+        tips: this.handleVarlamov(this.gameController.tips()),
+        inProcess: false
       })
     }).catch(error => {
       this.notification.show(
         'Что-то сломалось, зовите разраба',
         error && JSON.stringify(error)
       );
+      this.setState({
+        inProcess: false
+      });
     });
   };
 
   moveEast = () => {
-    this.gameController.goEast().then(() => {
       this.setState({
-        tips: this.handleVarlamov(this.gameController.tips())
+        inProcess: true
+      });
+      this.gameController.goEast().then(() => {
+      this.setState({
+        tips: this.handleVarlamov(this.gameController.tips()),
+        inProcess: false
       })
     }).catch(error => {
       this.notification.show(
         'Что-то сломалось, зовите разраба',
         error && JSON.stringify(error)
       );
+      this.setState({
+        inProcess: false
+      });
     });
   };
 
@@ -161,27 +197,27 @@ export class Game extends Component {
 
               <div className="Game-controls">
                 <div className="Get-button">
-                  <Button onClick={this.askTip} size="medium">
+                  <Button onClick={this.askTip} size="medium" disabled={this.state.inProcess}>
                     Осмотреться
                   </Button>
                 </div>
                 <div className="Get-button">
-                  <Button onClick={this.moveWest} size="medium">
+                  <Button onClick={this.moveWest} size="medium" disabled={this.state.inProcess}>
                     Пройти к западу
                   </Button>
                 </div>
                 <div className="Get-button">
-                  <Button onClick={this.moveNorth} size="medium">
+                  <Button onClick={this.moveNorth} size="medium" disabled={this.state.inProcess}>
                     Пройти к северу
                   </Button>
                 </div>
                 <div className="Get-button">
-                  <Button onClick={this.moveSouth} size="medium">
+                  <Button onClick={this.moveSouth} size="medium" disabled={this.state.inProcess}>
                     Пройти к югу
                   </Button>
                 </div>
                 <div className="Get-button">
-                  <Button onClick={this.moveEast} size="medium">
+                  <Button onClick={this.moveEast} size="medium" disabled={this.state.inProcess}>
                     Пройти к востоку
                   </Button>
                 </div>

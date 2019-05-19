@@ -8,6 +8,7 @@ many_spaces_regex = re.compile(r' +')
 def normalize(line):
     result = line.lower()
     result = result.replace('ё', 'е')
+    result = result.replace('́', '')
     result = re.sub(punctuation_regex, ' \g<0> ', result)
     result = re.sub(bad_characters_regex, ' ', result)
     result = re.sub(many_spaces_regex, ' ', result)
@@ -20,4 +21,4 @@ def stemming(text):
     return ' '.join(stemmer.stemWords(normilized_text.split()))
 
 if __name__ == "__main__":
-    print(stemming('Спланой мост'))
+    print(stemming('Декабри́сты'))

@@ -85,7 +85,9 @@ export class Game extends Component {
   }
 
   componentDidUpdate() {
-    this.tipsListRef.current.scrollTop = 10000;
+    if(this.tipsListRef && this.tipsListRef.current) {
+      this.tipsListRef.current.scrollTop = 10000;
+    }
   }
 
   askTip = () => {

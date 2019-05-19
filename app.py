@@ -384,8 +384,11 @@ def static_media(staticFile):
 def index(whatever):
     return static_file('index.html', "build")
 
+application = bottle.default_app()
+from paste import httpserver
+
 
 if os.environ.get('APP_LOCATION') == 'heroku':
-    run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    httpserver.serve(application, host='0.0.0.0', port=int(os.environ.get("PORT", 5000)))
 else:
-    run(host='localhost', port=8080, debug=True, server='paste')
+    httpserver.serve(application, host='localhost', port=8080, threadpool_workers=20, request_queue_size=20)

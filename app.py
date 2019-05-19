@@ -283,7 +283,9 @@ def get_game(game_id):
 def get_tips(game_id):
     game = games[game_id]
 
-    return {'tips': game.shown_tips}
+    has_more = len([tip for tip in game.tips if tip not in game.shown_tips]) > 0
+
+    return {'tips': game.shown_tips, 'hasMore': has_more}
 
 
 @post('/api/games/<game_id>/ask-tip')
@@ -295,7 +297,10 @@ def get_tip(game_id):
     game = games[game_id]
 
     show_tips(game, 1)
-    return {'tips': game.shown_tips}
+
+    has_more = len([tip for tip in game.tips if tip not in game.shown_tips]) > 0
+
+    return {'tips': game.shown_tips, 'hasMore': has_more}
 
 
 @post('/api/games/<game_id>/move/<direction>')
@@ -319,7 +324,10 @@ def move(game_id, direction):
 
     show_tips(game, 1)
 
-    return {'tips': game.shown_tips}
+    has_more = len([tip for tip in game.tips if tip not in game.shown_tips]) > 0
+
+
+    return {'tips': game.shown_tips, 'hasMore': has_more}
 
 
 @post('/api/games/<game_id>/finish/<latitude>/<longitude>')

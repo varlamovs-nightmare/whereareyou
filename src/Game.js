@@ -21,7 +21,8 @@ export class Game extends Component {
     this.gameController = new GameController(this.notification);
     this.state = {
       tips: this.gameController.tips(),
-      loading: true
+      loading: true,
+      hasMoreTips: this.gameController.hasMoreTips()
     };
   }
 
@@ -29,6 +30,7 @@ export class Game extends Component {
     this.gameController.createGame().then(() => this.gameController.loadTips()).then(() => {
       this.setState({
         tips: this.handleVarlamov(this.gameController.tips()),
+        hasMoreTips: this.gameController.hasMoreTips(),
         loading: false,
         inProcess: false
       }, () => {
@@ -49,6 +51,7 @@ export class Game extends Component {
     this.gameController.getMoreTips().then(() => {
       this.setState({
         tips: this.handleVarlamov(this.gameController.tips()),
+        hasMoreTips: this.gameController.hasMoreTips(),
         inProcess: false
       })
     }).catch(error => {
@@ -69,6 +72,7 @@ export class Game extends Component {
     this.gameController.goNorth().then(() => {
       this.setState({
         tips: this.handleVarlamov(this.gameController.tips()),
+        hasMoreTips: this.gameController.hasMoreTips(),
         inProcess: false
       })
     }).catch(error => {
@@ -89,6 +93,7 @@ export class Game extends Component {
     this.gameController.goWest().then(() => {
       this.setState({
         tips: this.handleVarlamov(this.gameController.tips()),
+        hasMoreTips: this.gameController.hasMoreTips(),
         inProcess: false
       })
     }).catch(error => {
@@ -109,6 +114,7 @@ export class Game extends Component {
     this.gameController.goSouth().then(() => {
       this.setState({
         tips: this.handleVarlamov(this.gameController.tips()),
+        hasMoreTips: this.gameController.hasMoreTips(),
         inProcess: false
       })
     }).catch(error => {
@@ -129,6 +135,7 @@ export class Game extends Component {
       this.gameController.goEast().then(() => {
       this.setState({
         tips: this.handleVarlamov(this.gameController.tips()),
+        hasMoreTips: this.gameController.hasMoreTips(),
         inProcess: false
       })
     }).catch(error => {
@@ -220,7 +227,7 @@ export class Game extends Component {
 
               <div className="Game-controls">
                 <div className="Get-button">
-                  <Button onClick={this.askTip} size="medium" disabled={this.state.inProcess}>
+                  <Button onClick={this.askTip} size="medium" disabled={this.state.inProcess || !this.state.hasMoreTips}>
                     Осмотреться
                   </Button>
                 </div>

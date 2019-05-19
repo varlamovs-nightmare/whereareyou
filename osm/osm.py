@@ -34,6 +34,8 @@ def filter_waterways(objects):
 def filter_sightseeings(objects):
     return list(filter(lambda o:
                        o['data']['tag'] != {}
+                       and 'lat' in o['data']
+                       and 'lon' in o['data']
                        and
                        (('tourism' in o['data']['tag']
                          and ('attraction' in o['data']['tag']['tourism']
